@@ -117,7 +117,7 @@ On Error GoTo Err_Ellenõrzés
     Dim lkEllLek, lknév     As String
     Dim tEll                As String       'Az ellenõrzés tábla neve
     Dim lkEredm             As String       'Az eredmény lekérdezés neve
-    Dim Üzenet              As String       'Az üzenetek számára
+    Dim üzenet              As String       'Az üzenetek számára
     
     If Kimenet Then
         lkEllLek = "SELECT * FROM lkEllenõrzõLekérdezések2 WHERE Osztály ='kimutatás' Order By Osztály Asc;"    'Ez a lekérdezés sorolja fel azokat a lekérdezéseket, amelyeket le kell futtatnunk.
