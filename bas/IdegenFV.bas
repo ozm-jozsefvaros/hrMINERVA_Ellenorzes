@@ -209,3 +209,13 @@ Function FieldTypeName(fld As DAO.Field) As String
 
     FieldTypeName = strReturn
 End Function
+
+Function IsArrayAllocated(arr As Variant) As Boolean
+'Source: www.cpearson.com/excel/isarrayallocated.aspx Copyright 2018, Charles H. Pearson
+'"(...)The formulas and VBA code are explicitly granted to the Public Domain, so you may _
+use them in any way you want, including in commercial works and in works for hire, without permission from me.(...)"
+        On Error Resume Next
+        IsArrayAllocated = IsArray(arr) And _
+                           Not IsError(LBound(arr, 1)) And _
+                           LBound(arr, 1) <= UBound(arr, 1)
+End Function

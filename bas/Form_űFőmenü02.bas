@@ -257,6 +257,11 @@ Private Sub Eredmény_Click()
 
     Dim V As Integer
     Dim válasz As Boolean
+    Dim ehj As New ehjoszt
+    
+    ehj.Ini
+    
+    
     V = 0
     állj = False
     Me.Stop.Visible = True
@@ -278,10 +283,11 @@ Private Sub Eredmény_Click()
     If Me.Beolvasás Or Not IsNull(Me.Osztály) Or Not IsNull(Me.Elõkészítés) Then
     '## Beolvasás
         If Me.Beolvasás Then
+        ehj.oszlopszam = 8
             If Me.File.Value <> "" Then
                 válasz = fvHaviTáblaImport(Me.File.Value, Me)
                 If válasz Then
-                    V = V + 1
+                    ehj.Novel
                     Me.FilePipa = True
                                     sFoly Me, "A havi létszámjelentés:; beolvastatott."
                 Else
@@ -293,7 +299,7 @@ Private Sub Eredmény_Click()
 
             If Me.FileSzervezet.Value <> "" Then
                 If SzervezetiTáblaImport(Me.FileSzervezet.Value, Me) Then
-                    V = V + 1
+                    ehj.Novel
                     Me.FileSzervezetPipa = True
                                     sFoly Me, "A szervezeti tábla:; beolvastatott."
                 Else
@@ -305,7 +311,7 @@ Private Sub Eredmény_Click()
 
             If Me.FileSzemély.Value <> "" Then
                 If tSzemélyekImport02(Me.FileSzemély.Value, Me) Then
-                    V = V + 1
+                    ehj.Novel
                     Me.FileSzemélyPipa = True
                                     sFoly Me, "A személytörzs tábla:; beolvastatott."
                     
@@ -315,10 +321,10 @@ Private Sub Eredmény_Click()
             Else
                                     sFoly Me, "A személytörzs tábla:; a beolvasás átugorva."
             End If
-            
+DoEvents
             If Me.FileLejáróHatáridõk.Value <> "" Then
                 If fvLejáróHatáridõkImport(Me.FileLejáróHatáridõk.Value, Me) Then
-                    V = V + 1
+                    ehj.Novel
                     Me.FileLejáróHatáridõkPipa = True
                                     sFoly Me, "A Lejáró határidõk:; beolvastatott."
                 Else
@@ -331,7 +337,7 @@ Private Sub Eredmény_Click()
             If Me.FileElbírálatlan.Value <> "" Then
                 MegnyitMentBezár (Me.FileElbírálatlan.Value) 'Megnyitjuk, elmentjük és bezárjuk - ez csak vajákolás, de mûködik...
                 If tTáblaImport(Me.FileElbírálatlan.Value, Me, "tAdatváltoztatásiIgények") Then
-                    V = V + 1
+                    ehj.Novel
                     Me.FileElbírálatlanPipa = True
                                     sFoly Me, "A tAdatváltoztatásiIgények tábla:; beolvastatott."
                 Else
@@ -347,7 +353,7 @@ Private Sub Eredmény_Click()
             If Me.FileNexonAzonosító.Value <> "" Then
                 MegnyitMentBezár (Me.FileNexonAzonosító.Value) 'Megnyitjuk, elmentjük és bezárjuk - ez csak "vajákolás", de mûködik...
                 If tTáblaImport(Me.FileNexonAzonosító.Value, Me, "tNexonAzonosítók") Then
-                    V = V + 1
+                    ehj.Novel
                     Me.FileNexonAzonosítóPipa = True
                                     sFoly Me, "A tNexonAzonosítók tábla:; beolvastatott."
                 Else
@@ -356,13 +362,19 @@ Private Sub Eredmény_Click()
             Else
                                     sFoly Me, "Az tNexonAzonosítók tábla:; a beolvasás átugorva."
             End If
+DoEvents
             If Me.FileBesorolásiEredményadatok.Value <> "" Then
-                If tSzemélyekImport02(Me.FileBesorolásiEredményadatok.Value, Me, "tBesorolásiEredményadatok") Then
-                    V = V + 1
+                If tSzemélyekImport02(Me.FileBesorolásiEredményadatok.Value, Me, "tBesorolásiEredményadatok", 1) Then
+                    ehj.Novel
                     Me.FileBesorolásiEredményadatokPipa = True
                                     sFoly Me, "A besorolások tábla:; beolvastatott."
                 Else
                                     sFoly Me, "A besorolások tábla:; a beolvasás sikertelen."
+                End If
+                                    
+DoEvents        'Az elõzõ munkaviszonyok beolvasása:
+                If tSzemélyekImport02(Me.FileBesorolásiEredményadatok.Value, Me, "tElõzõMunkahelyek", 2) Then
+                    sFoly Me, "Az elõzõ munkaviszonyok tábla:;beolvastatott!!"
                 End If
             Else
                                     sFoly Me, "A besorolások tábla:; a beolvasás átugorva."
@@ -376,21 +388,27 @@ Private Sub Eredmény_Click()
     '# Elõkészítés kezdete
 
         If Me.Elõkészítés Then
+                ehj.oszlopszam = ehj.oszlopszam + 1
                                    sFoly Me, "Betöltés:; ellenõrzés elõkészítése megkezdve."
                 Ellenõrzés1 (Me.Name) 'Ellenõrzés elõkészítése
+                ehj.Novel
                                         sFoly Me, "Beolvasás:; ellenõrzés elõkészítése befejezve."
                 Me.Refresh
         End If
     '## HTML elkészítése indul!!
     Dim i As Integer
         If Me.Mindet Then
+            ehj.oszlopszam = ehj.oszlopszam + Me.Osztály.ListCount
             For i = 0 To Me.Osztály.ListCount - 1
                 subHTMLKimenet Me, Me.Osztály.ItemData(i)
+                ehj.Novel
             Next i
         Else
             
             If Not (IsNull(Me.Osztály) Or IsNull(Me)) Then
+                ehj.oszlopszam = ehj.oszlopszam + 1
                 subHTMLKimenet Me, Me.Osztály ' Me.Osztály
+                ehj.Novel
             End If
                                         sFoly Me, "##########################;########", False
         End If

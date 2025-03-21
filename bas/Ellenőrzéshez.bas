@@ -135,7 +135,7 @@ fvbe ("fvHaviTáblaImport")
     Dim tábla           As String           'A tábla : a táblák jellemzõit tároló tábla
     
     'A szöveges kimenethez
-    Dim Üzenet As String
+    Dim üzenet As String
     
     'Számláláshoz
     Dim sor As Integer, oszlop As Integer
@@ -427,7 +427,7 @@ On Error GoTo ErrorHandler
 '    Dim strÚjFájl As String
 '    Dim intKezdPoz As Integer
 '    Dim intVégPoz As Integer
-    Dim Üzenet As String
+    Dim üzenet As String
     Dim válasz As Boolean
     
     importSpecName = táblanév 'pl.:"tAdatváltoztatásiIgények"
@@ -495,7 +495,7 @@ fvbe ("SzervezetiTáblaImport")
     Dim tábla           As String           'A tábla : a táblák jellemzõit tároló tábla
     
     'A szöveges kimenethez
-    Dim Üzenet As String
+    Dim üzenet As String
     
     'Számláláshoz
     Dim sor, oszlop     As Integer
@@ -1056,7 +1056,7 @@ fvbe ("fvHaviimpTáblákImportPlus")
     '___________________________________|__________________________|______________________________|______________________________|
     '   Objects                         | Strings                  | Numbers                      | Variants                     |
     '___________________________________|__________________________|______________________________|______________________________|
-                                     Dim Üzenet          As String
+                                     Dim üzenet          As String
     '___________________________________|__________________________|______________________________|______________________________|
     
     

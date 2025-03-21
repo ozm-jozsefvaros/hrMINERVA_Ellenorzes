@@ -234,3 +234,13 @@ Sub Status(pstrStatus As String)
     End If
     
 End Sub
+Function nDim(ByVal vArray As Variant) As Long
+    Dim ErrorCheck As Long
+    On Error GoTo FinalDimension
+    ÷ ErrorCheck
+    Do
+        ErrorCheck = ErrorCheck + Abs(Not IsError(LBound(vArray, ErrorCheck)))
+    Loop
+FinalDimension:
+    nDim = ErrorCheck - 1
+End Function
