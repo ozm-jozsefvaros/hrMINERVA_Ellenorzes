@@ -242,7 +242,7 @@ Function vMezõkTípusaImporthoz(eRng As Excel.Range) As Variant
     ' Return the array
     vMezõkTípusaImporthoz = arr
 End Function
-Public Function tSzemélyekImport02(strFájl As String, ûrlap As Form, Optional tábla As String = "tSzemélyek")
+Public Function tSzemélyekImport02(strFájl As String, ûrlap As Form, Optional tábla As String = "tSzemélyek", Optional ByVal beolvasandóLapSzám As Integer = 1)
     'On Error GoTo ErrorHandler
 fvbe ("tSzemélyekImport02")
     Dim importSpecName As String
@@ -251,7 +251,7 @@ fvbe ("tSzemélyekImport02")
     Dim prm As DAO.Parameter
     Dim xlWB As Workbook
     
-    Dim Üzenet As String
+    Dim üzenet As String
     Dim válasz As Boolean
     Dim Huba As Boolean
     
@@ -266,7 +266,7 @@ fvbe ("tSzemélyekImport02")
         If tábla = "tSzemélyek" Then 'Ha személytörzs,
             UresOszlopokTorlese strFájl, tábla 'a megadott állományból töröljük az üres oszlopokat, de
         Else 'ha nem,
-            UresOszlopokTorlese strFájl, tábla, False, False, "A2" 'akkor nem töröljük az üres oszlopkat, nem illesztünk be adószámot, és megadjuk a kezdõ cellát
+            UresOszlopokTorlese strFájl, tábla, False, False, "A2", beolvasandóLapSzám 'akkor nem töröljük az üres oszlopkat, nem illesztünk be adószámot, és megadjuk a kezdõ cellát
         End If
                                                     sFoly ûrlap, importSpecName & ":; importálás üres oszlopok törlése kész!"
 
