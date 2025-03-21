@@ -126,7 +126,7 @@ fvbe ("SzemélytörzsImport")
     Dim MezõListaTábla  As String           'A tábla : a tábla mezõinek (eredeti oszlopcím, mezõnév, típus) jellemzõit tároló tábla
     
     'A szöveges kimenethez
-    Dim Üzenet          As String
+    Dim üzenet          As String
     
     'Számláláshoz
     Dim sor, oszlop     As Integer

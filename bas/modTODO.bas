@@ -422,3 +422,5 @@ Sub lekérdezésSorszámozó(lekérdezésNév As String)
     DoCmd.OpenQuery lekérdezésNév, acViewNormal, acReadOnly
        
 End Sub
+
+
