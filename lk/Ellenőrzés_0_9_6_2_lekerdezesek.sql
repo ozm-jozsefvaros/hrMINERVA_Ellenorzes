@@ -1241,7 +1241,7 @@ FROM lkSzemélyek;
 #/#/#/
 lk_Fõosztály_Osztály_lkSzemélyek
 #/#/
-SELECT DISTINCT lkSzemélyek.[Szervezeti egység kódja], lkSzemélyek.BFKH, lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, IIf(Nz([Osztály],"")="",0,IIf(utolsó([BFKH],".")="",0,utolsó([BFKH],"."))*1)+1 AS Sorszám
+SELECT DISTINCT lkSzemélyek.BFKH, lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, IIf(Nz([Osztály],"")="",0,IIf(utolsó([BFKH],".")="",0,utolsó([BFKH],"."))*1)+1 AS Sorszám, lkSzemélyek.[Szervezeti egység kódja]
 FROM lkSzemélyek;
 
 #/#/#/
@@ -2502,6 +2502,15 @@ SELECT DISTINCT lkSzemélyek.BFKH, lkForrásNexonSzervezetekÖsszerendelés.Fõoszt, 
 FROM (lkForrásNexonSzervezetekÖsszerendelés INNER JOIN tSzakfeladatForráskód ON lkForrásNexonSzervezetekÖsszerendelés.ForrásKód = tSzakfeladatForráskód.SzervEgysKód) INNER JOIN lkSzemélyek ON (lkForrásNexonSzervezetekÖsszerendelés.Fõoszt = lkSzemélyek.Fõosztály) AND (lkForrásNexonSzervezetekÖsszerendelés.Oszt = lkSzemélyek.[Szervezeti egység neve]);
 
 #/#/#/
+lkBiztosanJogosultakUtazásiKedvezményre
+#/#/
+SELECT lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], lkSzemélyek.Adójel, "FõosztRöv_" & [Dolgozó teljes neve] & "_(" & [azNexon] & ")_utazási.pdf" AS Fájlnév
+FROM kt_azNexon_Adójel02 INNER JOIN (lkSzemélyek INNER JOIN lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai ON lkSzemélyek.Adójel = lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Adójel) ON kt_azNexon_Adójel02.Adójel = lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Adójel
+GROUP BY lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], lkSzemélyek.Adójel, "FõosztRöv_" & [Dolgozó teljes neve] & "_(" & [azNexon] & ")_utazási.pdf", lkSzemélyek.BFKH
+HAVING (((Sum(lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Napok))>=365))
+ORDER BY lkSzemélyek.BFKH, lkSzemélyek.[Dolgozó teljes neve];
+
+#/#/#/
 lkCímek01
 #/#/
 SELECT strcount(Nz([Állandó lakcím],"")," ") AS Kif1, lkSzemélyek.[Státusz neve]
@@ -2834,6 +2843,14 @@ WHERE (((tBesorolásiEredményadatok.[Besorolási fokozat12])="Osztályvezetõ"))
 GROUP BY [Adóazonosító jel]*1;
 
 #/#/#/
+lkEltérésBankszámlaszámPGFNexon
+#/#/
+SELECT lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], ffsplit([Utalási cím],"|",3) AS Bankszámlaszám, PGF_2025_02.Folyószámlaszám
+FROM lkSzemélyek INNER JOIN PGF_2025_02 ON lkSzemélyek.Adójel = PGF_2025_02.[Adóazonosító jel]
+WHERE (((Replace(Nz(ffsplit([Utalási cím],"|",3),""),"-00000000",""))<>Replace(Nz([Folyószámlaszám],""),"-00000000","")))
+ORDER BY lkSzemélyek.BFKH;
+
+#/#/#/
 lkEltérõBesorolásokLechnernek
 #/#/
 SELECT lkSzemélyek.Adójel, "" AS [HR kapcsolat azonosító], #1/1/2024# AS [Érvényesség kezdete], tBesorolásiKódok.Kód, tBesorolásÁtalakítóEltérõBesoroláshoz.[Besorolási  fokozat (KT)] AS ÁNYR, lkSzemélyek.[Besorolási  fokozat (KT)] AS [Nexon személytörzs], lkBesorolásVáltoztatások.RégiBesorolás, lkBesorolásVáltoztatások.ÚjBesorolás, lkÁlláshelyek.[Álláshely azonosító]
@@ -3121,11 +3138,12 @@ ORDER BY tRégiHibák.[Elsõ Idõpont];
 #/#/#/
 lkFennállóHibákStatisztika
 #/#/
-SELECT tRégiHibák.lekérdezésNeve, Count(tRégiHibák.[Elsõ mezõ]) AS Hibák, Count(lkktRégiHibákIntézkedésekUtolsóIntézkedés.azIntézkedések) AS [Ebbõl intézett]
-FROM tRégiHibák LEFT JOIN lkktRégiHibákIntézkedésekUtolsóIntézkedés ON tRégiHibák.[Elsõ mezõ] = lkktRégiHibákIntézkedésekUtolsóIntézkedés.HASH
+SELECT lkEllenõrzõLekérdezések2.Táblacím, [Hibák]-[Ebbõl intézett] AS Intézetlen, Count(tRégiHibák.[Elsõ mezõ]) AS Hibák, Count(lkktRégiHibákIntézkedésekUtolsóIntézkedés.azIntézkedések) AS [Ebbõl intézett]
+FROM lkEllenõrzõLekérdezések2 INNER JOIN (tRégiHibák LEFT JOIN lkktRégiHibákIntézkedésekUtolsóIntézkedés ON tRégiHibák.[Elsõ mezõ] = lkktRégiHibákIntézkedésekUtolsóIntézkedés.HASH) ON lkEllenõrzõLekérdezések2.EllenõrzõLekérdezés = tRégiHibák.lekérdezésNeve
 WHERE (((tRégiHibák.[Utolsó Idõpont])=(select max([utolsó idõpont]) from tRégiHibák where lekérdezésneve <>"lkÜresÁlláshelyekÁllapotfelmérõ" And lekérdezésneve <>"lkFontosHiányzóAdatok02")))
-GROUP BY tRégiHibák.lekérdezésNeve
-HAVING (((tRégiHibák.lekérdezésNeve)<>"lkLejártAlkalmasságiÉrvényesség" And (tRégiHibák.lekérdezésNeve)<>"lkÜresÁlláshelyekÁllapotfelmérõ" And "lekérdezésneve"<>"lkFontosHiányzóAdatok02"));
+GROUP BY lkEllenõrzõLekérdezések2.Táblacím, tRégiHibák.lekérdezésNeve
+HAVING (((tRégiHibák.lekérdezésNeve)<>"lkLejártAlkalmasságiÉrvényesség" And (tRégiHibák.lekérdezésNeve)<>"lkÜresÁlláshelyekÁllapotfelmérõ") AND (("lekérdezésneve")<>"lkFontosHiányzóAdatok02"))
+ORDER BY Count(tRégiHibák.[Elsõ mezõ]) DESC , Count(lkktRégiHibákIntézkedésekUtolsóIntézkedés.azIntézkedések) DESC;
 
 #/#/#/
 lkFennállóNemHibák
@@ -3187,6 +3205,33 @@ lkFontosHiányzóAdatok02
 SELECT lkFontosHiányzóAdatok01.Fõosztály, lkFontosHiányzóAdatok01.Osztály, lkFontosHiányzóAdatok01.Név, lkFontosHiányzóAdatok01.[Hiányzó érték], lkFontosHiányzóAdatok01.[Státusz kód], lkFontosHiányzóAdatok01.NLink, lkFontosHiányzóAdatok01.Megjegyzés
 FROM lkFontosHiányzóAdatok01 LEFT JOIN lkktRégiHibákIntézkedésekLegutolsóIntézkedés ON lkFontosHiányzóAdatok01.Hash = lkktRégiHibákIntézkedésekLegutolsóIntézkedés.HASH
 WHERE (((lkktRégiHibákIntézkedésekLegutolsóIntézkedés.azIntFajta)=3 Or (lkktRégiHibákIntézkedésekLegutolsóIntézkedés.azIntFajta) Is Null Or (lkktRégiHibákIntézkedésekLegutolsóIntézkedés.azIntFajta)=8));
+
+#/#/#/
+lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai
+#/#/
+SELECT [Adóazonosító jel]*1 AS Adójel, tElõzõMunkahelyek.[Munkahely neve], tElõzõMunkahelyek.[Jogviszony típus megnevezése], tElõzõMunkahelyek.Kezdete1, tElõzõMunkahelyek.Vége2, DateDiff("d",[Fordulónap],[Vége2])-IIf(DateDiff("d",[Fordulónap],[Kezdete1])>0,DateDiff("d",[Fordulónap],[Kezdete1]),0)+1 AS Napok
+FROM tElõzõMunkahelyek
+WHERE (((tElõzõMunkahelyek.Vége2)>=[Fordulónap]));
+
+#/#/#/
+lkFordulónaptólABelépésigElõzõÖsszesMunkanapja
+#/#/
+SELECT lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai.*
+FROM lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai
+UNION SELECT lkFordulónaptólABelépésigElõzõJogviszonyMunkanapjai.*
+FROM lkFordulónaptólABelépésigElõzõJogviszonyMunkanapjai;
+
+#/#/#/
+lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai
+#/#/
+SELECT lkSzemélyek.Adójel, "BFKH" AS [Munkahely neve], lkSzemélyek.[Jogviszony típusa / jogviszony típus], lkSzemélyek.[Jogviszony kezdete (belépés dátuma)] AS Kezdete, IIf([Jogviszony vége (kilépés dátuma)]=0 Or [Jogviszony vége (kilépés dátuma)]>DateSerial(Year([Fordulónap])+1,Month([Fordulónap]),Day([Fordulónap])-1),DateSerial(Year([Fordulónap])+1,Month([Fordulónap]),Day([Fordulónap])-1),[Jogviszony vége (kilépés dátuma)]) AS Vége, DateDiff("d",[Fordulónap],[Vége])-IIf(DateDiff("d",[Fordulónap],[Kezdete])>0,DateDiff("d",[Fordulónap],[Kezdete]),0)+1 AS Napok
+FROM lkSzemélyek
+WHERE (((lkSzemélyek.[Jogviszony típusa / jogviszony típus]) Like "K*" 
+        Or (lkSzemélyek.[Jogviszony típusa / jogviszony típus]) Like "H*"
+        Or (lkSzemélyek.[Jogviszony típusa / jogviszony típus]) Like "Mu*" 
+        Or (lkSzemélyek.[Jogviszony típusa / jogviszony típus]) Like "P*") 
+	AND ((lkSzemélyek.[Jogviszony vége (kilépés dátuma)])>=[Fordulónap] 
+		Or (lkSzemélyek.[Jogviszony vége (kilépés dátuma)])=0));
 
 #/#/#/
 lkForrásNexonSzervezetekÖsszerendelés
@@ -3363,10 +3408,10 @@ FROM lkVárosKerületenkéntiFõosztályonkéntiLétszám01 INNER JOIN lkFõosztályonként
 #/#/#/
 lkFõosztályokOsztályokSorszámal2
 #/#/
-SELECT lk_Fõosztály_Osztály_lkSzemélyek.[Szervezeti egység kódja], lk_Fõosztály_Osztály_lkSzemélyek.BFKH, lk_Fõosztály_Osztály_lkSzemélyek.Fõosztály, lk_Fõosztály_Osztály_lkSzemélyek.Osztály, [lk_Fõosztály_Osztály_lkSzemélyek].[Sorszám]*1 AS Sorszám INTO tFõosztályokOsztályokSorszámmal
+SELECT lk_Fõosztály_Osztály_lkSzemélyek.BFKH, lk_Fõosztály_Osztály_lkSzemélyek.Fõosztály, lk_Fõosztály_Osztály_lkSzemélyek.Osztály, [lk_Fõosztály_Osztály_lkSzemélyek].[Sorszám]*1 AS Sorszám INTO tFõosztályokOsztályokSorszámmal
 FROM lk_Fõosztály_Osztály_lkSzemélyek
 WHERE (((lk_Fõosztály_Osztály_lkSzemélyek.BFKH) Like "BFKH*"))
-ORDER BY lk_Fõosztály_Osztály_lkSzemélyek.[Szervezeti egység kódja], [lk_Fõosztály_Osztály_lkSzemélyek].[Sorszám]*1;
+ORDER BY [lk_Fõosztály_Osztály_lkSzemélyek].[Sorszám]*1;
 
 #/#/#/
 lkFõosztályokOsztályokSorszámmal
@@ -3604,6 +3649,12 @@ lkháttértár_tBesorolásiEredményadatok_törlõ
 #/#/
 DELETE *
 FROM tBesorolásiEredményadatok IN 'L:\Ugyintezok\Adatszolgáltatók\Adatbázisok\Háttértárak\Ellenõrzés_0.9.6_háttér_.mdb.accdb';
+
+#/#/#/
+lkháttértár_tElõzõMunkahelyek_törlõ
+#/#/
+DELETE *
+FROM tElõzõMunkahelyek IN 'L:\Ugyintezok\Adatszolgáltatók\Adatbázisok\Háttértárak\Ellenõrzés_0.9.6_háttér_.mdb.accdb';
 
 #/#/#/
 lkháttértár_tSzemélyek_áttöltés
@@ -4486,7 +4537,9 @@ SELECT BetöltöttekÉsÜresek.[ÁNYR azonosító], BetöltöttekÉsÜresek.Besorolás, Betö
 FROM (SELECT Betöltöttek.*
 FROM lkKimenetÜresÁlláshelyekKimutatáshoz01 AS Betöltöttek
 UNION SELECT Üresek.*
-FROM  lkKimenetÜresÁlláshelyekKimutatáshoz02 AS Üresek)  AS BetöltöttekÉsÜresek;
+FROM lkKimenetÜresÁlláshelyekKimutatáshoz02 AS Üresek
+union SELECT Határozottak.mezõ25 AS [ÁNYR azonosító], Határozottak.mezõ24 AS Besorolás, Határozottak.[Központosított álláshely] AS Jelleg, Határozottak.[Tartós távollévõ álláshelyén határozott idõre foglalkoztatott ne] AS [Betöltõ neve], IIf([mezõ18]="megyei szint",[mezõ19],[mezõ18]) AS Fõosztály, Határozottak.mezõ20 AS Osztály, "Betöltött" AS Állapot, Határozottak.mezõ22 AS [Ellátott feladat], IIf(CStr([Mezõ23]) Like "*Ov*" Or CStr([Mezõ23]) Like "*Jhv*" Or CStr([mezõ23]) Like "*ig." Or CStr([Mezõ23])="fsp.","vezetõi","") AS Megjegyzés
+FROM Határozottak)  AS BetöltöttekÉsÜresek;
 
 #/#/#/
 lkKimenetÜresÁlláshelyekKimutatáshoz01
@@ -4873,6 +4926,19 @@ SELECT TOP 10 ffsplit([Második mezõ],"|",1) AS Fõosztály, Count(lkLegrégibbHibák
 FROM lkLegrégibbHibák
 GROUP BY ffsplit([Második mezõ],"|",1)
 ORDER BY Count(lkLegrégibbHibák.[Elsõ Idõpont]) DESC;
+
+#/#/#/
+lkLehethogyJogosultakUtazásiKedvezményre
+#/#/
+SELECT lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], lkSzemélyek.Adójel, "FõosztRöv_" & [lkszemélyek].[Dolgozó teljes neve] & "_(" & [azNexon] & ")_utazási.pdf" AS Fájlnév
+FROM lkSzemélyek INNER JOIN (kt_azNexon_Adójel02 INNER JOIN (lkBiztosanJogosultakUtazásiKedvezményre RIGHT JOIN (SELECT lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai.Adójel, lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai.Napok
+FROM lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai
+UNION SELECT lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Adójel, lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Napok
+FROM lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai)  AS UNIÓ ON lkBiztosanJogosultakUtazásiKedvezményre.Adójel = UNIÓ.Adójel) ON kt_azNexon_Adójel02.Adójel = UNIÓ.Adójel) ON lkSzemélyek.Adójel = UNIÓ.Adójel
+WHERE (((lkBiztosanJogosultakUtazásiKedvezményre.Adójel) Is Null))
+GROUP BY lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], lkSzemélyek.Adójel, "FõosztRöv_" & [lkszemélyek].[Dolgozó teljes neve] & "_(" & [azNexon] & ")_utazási.pdf", lkSzemélyek.BFKH
+HAVING (((Sum(UNIÓ.Napok))>=365))
+ORDER BY lkSzemélyek.BFKH, lkSzemélyek.[Dolgozó teljes neve];
 
 #/#/#/
 lkLejáróHatáridõk
@@ -5485,6 +5551,19 @@ lkNapok02
 SELECT lkNapok01.Év, lkNapok01.Nap, lkNapok01.Dátum INTO tNapok03
 FROM lkNapok01
 WHERE (((Year([Dátum]))=[Év]));
+
+#/#/#/
+lkNemJogosultakUtazásiKedvezményre
+#/#/
+SELECT lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], UNIÓ.Adójel, "FõosztRöv_" & [Dolgozó teljes neve] & "_(" & [azNexon] & ")_utazási.pdf" AS Fájlnév
+FROM kt_azNexon_Adójel02 INNER JOIN (lkSzemélyek INNER JOIN (SELECT lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai.Adójel, lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai.Napok
+FROM lkFordulónaptólABelépésigElõzõMunkahelyMunkanapjai
+UNION SELECT lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Adójel, lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai.Napok
+FROM lkFordulónaptólEgyévigMindenJogviszonyMunkanapjai)  AS UNIÓ ON lkSzemélyek.Adójel = UNIÓ.Adójel) ON kt_azNexon_Adójel02.Adójel = UNIÓ.Adójel
+WHERE (((lkSzemélyek.Fõosztály)<>""))
+GROUP BY lkSzemélyek.Fõosztály, lkSzemélyek.Osztály, lkSzemélyek.[Dolgozó teljes neve], UNIÓ.Adójel, "FõosztRöv_" & [Dolgozó teljes neve] & "_(" & [azNexon] & ")_utazási.pdf", lkSzemélyek.BFKH
+HAVING (((Sum(UNIÓ.Napok)) Between 1 And 365))
+ORDER BY lkSzemélyek.BFKH, lkSzemélyek.[Dolgozó teljes neve];
 
 #/#/#/
 lkNemOrvosÁlláshelyekenDolgozóOrvosok
@@ -6333,6 +6412,13 @@ SELECT 1 as sor, lkSzemélyek.Fõosztály, 0 AS FõosztályiLétszám, Bfkh([lkSzemélye
        GROUP BY lkSzemélyek.[Státusz neve], "BFKH.99")  AS UNIÓ
 GROUP BY UNIÓ.sor, UNIÓ.Fõosztály, UNIÓ.FõosztKód
 ORDER BY UNIÓ.sor;
+
+#/#/#/
+lkSzemélyekKITesekNemTTsekAdottNapon
+#/#/
+SELECT DISTINCT tSzemélyek.[Adóazonosító jel]
+FROM tSzemélyek
+WHERE (((tSzemélyek.[Jogviszony típusa / jogviszony típus])="kormányzati szolgálati jogviszony") AND ((tSzemélyek.[Jogviszony kezdete (belépés dátuma)])<=[dátum]) AND ((tSzemélyek.[Jogviszony vége (kilépés dátuma)])>=[dátum] Or (tSzemélyek.[Jogviszony vége (kilépés dátuma)])=0) AND ((dtátal([Tartós távollét kezdete]))>=dtátal([dátum]) Or (dtátal([Tartós távollét kezdete]))=0)) OR (((tSzemélyek.[Jogviszony típusa / jogviszony típus])="kormányzati szolgálati jogviszony") AND ((tSzemélyek.[Jogviszony kezdete (belépés dátuma)])<=[dátum]) AND ((tSzemélyek.[Jogviszony vége (kilépés dátuma)])>=[dátum] Or (tSzemélyek.[Jogviszony vége (kilépés dátuma)])=0) AND ((dtátal([Tartós távollét vége])) Between 1 And dtátal([dátum])));
 
 #/#/#/
 lkSzemélyekMind
