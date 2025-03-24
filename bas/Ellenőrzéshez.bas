@@ -1,4 +1,4 @@
-'E gy˚temÈnyben, ha az MIT licencia emlÌttettik, (megjelˆlve a szerzıt Ès a m˚ sz¸letÈsÈnek ÈvÈt) azon az al·bbi felhaszn·l·si engedÈlyt kell Èrteni:
+'E gy≈±tem√©nyben, ha az MIT licencia eml√≠ttettik, (megjel√∂lve a szerz≈ët √©s a m≈± sz√ºlet√©s√©nek √©v√©t) azon az al√°bbi felhaszn√°l√°si enged√©lyt kell √©rteni:
 
 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 'to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
@@ -9,26 +9,26 @@
 'WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Option Explicit
 Option Compare Database
-Sub F·jlV·lasztÛ(SzˆvegMezı As TextBox, Felirat As String, Optional Munkakˆnyvt·r As String = "", Optional f·jlnÈv As String = "", Optional f·jltÌpus As String = "")
-'Open file ablakot nyit meg Felirat felirattal, s a kiv·lasztott ÈrtÈket a SzˆvegMezı beviteli mezıbe teszi.
-'Meg lehet adni kezdı mapp·t, vagy ak·r az alapÈrtelmezetten megjelenı ·llom·nyok neveit is helykitˆltıkkel (* Ès ?)
-'Meg lehet adni a f·jltÌpusok list·j·t, ha ¸res (vagy hi·nyzik) akkor *.xls Ès *.* az alapÈrtelmezett
-'Ezt meghÌvj·k az al·bbi elj·r·sok:
+Sub F√°jlV√°laszt√≥(Sz√∂vegMez≈ë As TextBox, Felirat As String, Optional Munkak√∂nyvt√°r As String = "", Optional f√°jln√©v As String = "", Optional f√°jlt√≠pus As String = "")
+'Open file ablakot nyit meg Felirat felirattal, s a kiv√°lasztott √©rt√©ket a Sz√∂vegMez≈ë beviteli mez≈ëbe teszi.
+'Meg lehet adni kezd≈ë mapp√°t, vagy ak√°r az alap√©rtelmezetten megjelen≈ë √°llom√°nyok neveit is helykit√∂lt≈ëkkel (* √©s ?)
+'Meg lehet adni a f√°jlt√≠pusok list√°j√°t, ha √ºres (vagy hi√°nyzik) akkor *.xls √©s *.* az alap√©rtelmezett
+'Ezt megh√≠vj√°k az al√°bbi elj√°r√°sok:
 '   Havi_Click
 '   Szervezeti_Click
-'   SzemÈlytˆrzs_Click
+'   Szem√©lyt√∂rzs_Click
 
     Dim fDialog As Office.FileDialog
     Dim varFile As Variant
     Dim i, n As Integer
     
-    If SzˆvegMezı.Value <> "" Then 'Ha m·r van kiv·lasztott ˙tvonal a mezıben,
-        If Right(SzˆvegMezı.Value, 1) = "\" Or InStr(1, UtolsÛ(SzˆvegMezı.Value, "\"), ".") = 0 Then 'Ès az egy kˆnyvt·rra mutat, (mert \ jelre vÈgzıdik vagy az utolsÛ \ jel ut·n ".")
-            Munkakˆnyvt·r = SzˆvegMezı.Value 'akkor ez lesz a munkakˆnyvt·r
-        Else 'de ha egy f·jlra mutat,
-            Munkakˆnyvt·r = Replace(SzˆvegMezı.Value, UtolsÛ(SzˆvegMezı.Value, "\"), "") 'akkor a f·jlnÈv rÈszt csonkoljuk, s a maradÈkot haszn·ljuk...
+    If Sz√∂vegMez≈ë.Value <> "" Then 'Ha m√°r van kiv√°lasztott √∫tvonal a mez≈ëben,
+        If Right(Sz√∂vegMez≈ë.Value, 1) = "\" Or InStr(1, Utols√≥(Sz√∂vegMez≈ë.Value, "\"), ".") = 0 Then '√©s az egy k√∂nyvt√°rra mutat, (mert \ jelre v√©gz≈ëdik vagy az utols√≥ \ jel ut√°n ".")
+            Munkak√∂nyvt√°r = Sz√∂vegMez≈ë.Value 'akkor ez lesz a munkak√∂nyvt√°r
+        Else 'de ha egy f√°jlra mutat,
+            Munkak√∂nyvt√°r = Replace(Sz√∂vegMez≈ë.Value, Utols√≥(Sz√∂vegMez≈ë.Value, "\"), "") 'akkor a f√°jln√©v r√©szt csonkoljuk, s a marad√©kot haszn√°ljuk...
         End If
-    End If ' egyÈbkÈnt pedig a paramÈterkÈnt (Munkakˆnyvt·r) megadott ˙tvonal lesz a bar·tunk.
+    End If ' egy√©bk√©nt pedig a param√©terk√©nt (Munkak√∂nyvt√°r) megadott √∫tvonal lesz a bar√°tunk.
 
     Set fDialog = Application.FileDialog(msoFileDialogFilePicker)
  
@@ -39,39 +39,39 @@ Sub F·jlV·lasztÛ(SzˆvegMezı As TextBox, Felirat As String, Optional Munkakˆnyvt·
       .Title = Felirat
  
       .Filters.Clear
-      If f·jltÌpus = "" Then
-        '.Filters.Add "MsExcel t·bla", "*.XLS*"
+      If f√°jlt√≠pus = "" Then
+        '.Filters.Add "MsExcel t√°bla", "*.XLS*"
         '.Filters.Add "Minden fajta", "*.*"
-        f·jltÌpus = "*.XSL*,*.*"
+        f√°jlt√≠pus = "*.XSL*,*.*"
       End If
-      n = StrCount(f·jltÌpus, ",") + 1
+      n = StrCount(f√°jlt√≠pus, ",") + 1
       For i = 1 To n
-        .Filters.Add ffsplit(f·jltÌpus, i), ffsplit(f·jltÌpus, i)
+        .Filters.Add ffsplit(f√°jlt√≠pus, i), ffsplit(f√°jlt√≠pus, i)
       Next i
-      If Right(Munkakˆnyvt·r, 1) <> "\" Then
-        Munkakˆnyvt·r = Munkakˆnyvt·r & "\"
+      If Right(Munkak√∂nyvt√°r, 1) <> "\" Then
+        Munkak√∂nyvt√°r = Munkak√∂nyvt√°r & "\"
       End If
-      .InitialFileName = Munkakˆnyvt·r & f·jlnÈv 'Hol nyÌljon meg
+      .InitialFileName = Munkak√∂nyvt√°r & f√°jln√©v 'Hol ny√≠ljon meg
  
       If .Show = True Then
  
          For Each varFile In .SelectedItems
-            SzˆvegMezı.Value = varFile
+            Sz√∂vegMez≈ë.Value = varFile
          Next
  
       End If
    End With
 End Sub
-Sub MappaV·lasztÛ(SzˆvegMezı As TextBox, Felirat As String, Optional Munkakˆnyvt·r As String = "")
-'Open kˆnyvt·r ablakot nyit meg Felirat felirattal, s a kiv·lasztott ÈrtÈket a SzˆvegMezı beviteli mezıbe teszi.
-'Meg lehet adni kezdı mapp·t, vagy ak·r az alapÈrtelmezetten megjelenı ·llom·nyok neveit is helykitˆltıkkel (* Ès ?)
-'Ezt meghÌvj·k az al·bbi elj·r·sok:
+Sub MappaV√°laszt√≥(Sz√∂vegMez≈ë As TextBox, Felirat As String, Optional Munkak√∂nyvt√°r As String = "")
+'Open k√∂nyvt√°r ablakot nyit meg Felirat felirattal, s a kiv√°lasztott √©rt√©ket a Sz√∂vegMez≈ë beviteli mez≈ëbe teszi.
+'Meg lehet adni kezd≈ë mapp√°t, vagy ak√°r az alap√©rtelmezetten megjelen≈ë √°llom√°nyok neveit is helykit√∂lt≈ëkkel (* √©s ?)
+'Ezt megh√≠vj√°k az al√°bbi elj√°r√°sok:
 '   Kiemenet_Click()
 
     Dim fDialog As Office.FileDialog
     Dim varFile As Variant
  
-    SzˆvegMezı.Value = ""
+    Sz√∂vegMez≈ë.Value = ""
 
     Set fDialog = Application.FileDialog(msoFileDialogFolderPicker)
  
@@ -83,174 +83,174 @@ Sub MappaV·lasztÛ(SzˆvegMezı As TextBox, Felirat As String, Optional Munkakˆnyvt
  
       .Filters.Clear
 
-      If Right(Munkakˆnyvt·r, 1) <> "\" Then
-        Munkakˆnyvt·r = Munkakˆnyvt·r & "\"
+      If Right(Munkak√∂nyvt√°r, 1) <> "\" Then
+        Munkak√∂nyvt√°r = Munkak√∂nyvt√°r & "\"
       End If
-      .InitialFileName = Munkakˆnyvt·r  'Hol nyÌljon meg
+      .InitialFileName = Munkak√∂nyvt√°r  'Hol ny√≠ljon meg
  
       If .Show = True Then
             For Each varFile In .SelectedItems
-                SzˆvegMezı.Value = varFile
+                Sz√∂vegMez≈ë.Value = varFile
             Next
-            If SzˆvegMezı.Value = "" Then
-                SzˆvegMezı.Value = Munkakˆnyvt·r
+            If Sz√∂vegMez≈ë.Value = "" Then
+                Sz√∂vegMez≈ë.Value = Munkak√∂nyvt√°r
             End If
        End If
    End With
 End Sub
-Public Sub HaviT·blaImport(f·jlnÈv As String, ˚rlap As Object)
+Public Sub HaviT√°blaImport(f√°jln√©v As String, ≈±rlap As Object)
 Dim a As Boolean
-    ˚rlap.Folyamat.RowSource = ""
-    a = fvHaviT·blaImport(f·jlnÈv, ˚rlap)
+    ≈±rlap.Folyamat.RowSource = ""
+    a = fvHaviT√°blaImport(f√°jln√©v, ≈±rlap)
 End Sub
 
-Public Function fvHaviT·blaImport(ByVal f·jlnÈv As String, ByRef ˚rlap As Object, Optional ByVal lnCsoport As Long = 1) As Boolean
-fvbe ("fvHaviT·blaImport")
-'Licencia: MIT Ol·h Zolt·n 2022 (c)
-    'Az Excel megnyit·s·hoz
+Public Function fvHaviT√°blaImport(ByVal f√°jln√©v As String, ByRef ≈±rlap As Object, Optional ByVal lnCsoport As Long = 1) As Boolean
+fvbe ("fvHaviT√°blaImport")
+'Licencia: MIT Ol√°h Zolt√°n 2022 (c)
+    'Az Excel megnyit√°s√°hoz
     Dim objExcel        As Excel.Application
     Dim objBook         As Excel.Workbook
     Dim objSheet        As Excel.Worksheet
     Dim objRange        As Excel.Range
     
-    Dim accT·bla         As String
-    Dim xlT·blaEred     As String
-    Dim xlVÈgcella      As String
+    Dim accT√°bla         As String
+    Dim xlT√°blaEred     As String
+    Dim xlV√©gcella      As String
     
-    Dim xlUtolsÛOszlop  As String
-    Dim intVÈgcella     As Integer
-    Dim xlHosszmÈrı     As String
+    Dim xlUtols√≥Oszlop  As String
+    Dim intV√©gcella     As Integer
+    Dim xlHosszm√©r≈ë     As String
     
-    Dim …rtÈkek()       As Variant
-    Dim intMezı         As Integer
+    Dim √ârt√©kek()       As Variant
+    Dim intMez≈ë         As Integer
     
-    'Az adatb·zis megnyit·s·hoz
-    Dim db              As DAO.Database     'Ez lesz az adatb·zisunk
-    Dim strH·ttÈrDb        As String     'Ez a h·ttÈradatb·zis, ahol a t·bl·k laknak
-    Dim rs              As DAO.Recordset    'A beolvasandÛ lapok Ès ter¸letek adatait tartalmazÛ t·bl·nak
-    Dim rsCÈl           As DAO.Recordset    'Ahov· m·solunk
-    Dim f·jl            As String
+    'Az adatb√°zis megnyit√°s√°hoz
+    Dim db              As DAO.Database     'Ez lesz az adatb√°zisunk
+    Dim strH√°tt√©rDb        As String     'Ez a h√°tt√©radatb√°zis, ahol a t√°bl√°k laknak
+    Dim rs              As DAO.Recordset    'A beolvasand√≥ lapok √©s ter√ºletek adatait tartalmaz√≥ t√°bl√°nak
+    Dim rsC√©l           As DAO.Recordset    'Ahov√° m√°solunk
+    Dim f√°jl            As String
     
-    Dim EredmÈny        As Integer
-    Dim t·bla           As String           'A t·bla : a t·bl·k jellemzıit t·rolÛ t·bla
+    Dim Eredm√©ny        As Integer
+    Dim t√°bla           As String           'A t√°bla : a t√°bl√°k jellemz≈ëit t√°rol√≥ t√°bla
     
-    'A szˆveges kimenethez
-    Dim ‹zenet As String
+    'A sz√∂veges kimenethez
+    Dim √ºzenet As String
     
-    'Sz·ml·l·shoz
+    'Sz√°ml√°l√°shoz
     Dim sor As Integer, oszlop As Integer
     
-    t·bla = "tImport·landÛT·bl·k"
-    strH·ttÈrDb = "L:\Ugyintezok\Adatszolg·ltatÛk\Adatb·zisok\H·ttÈrt·rak\EllenırzÈs_0.9.6_h·ttÈr_.mdb.accdb"
-    intVÈgcella = 0
+    t√°bla = "tImport√°land√≥T√°bl√°k"
+    strH√°tt√©rDb = "L:\Ugyintezok\Adatszolg√°ltat√≥k\Adatb√°zisok\H√°tt√©rt√°rak\Ellen≈ërz√©s_0.9.6_h√°tt√©r_.mdb.accdb"
+    intV√©gcella = 0
 'On Error GoTo hiba
     
     Set objExcel = CreateObject("Excel.Application")
     Set db = CurrentDb()
-    'Set h·ttÈrdb =
-    ' ha az ˙tvonal vÈgÈn nincs \, akkor hozz·f˚zz¸k, [de ha van, akkor meg nem :)]
-    f·jl = f·jlnÈv
-    ' megnyitjuk az Excel t·bl·t
-    Set objBook = objExcel.Workbooks.Open(f·jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
-    logba "Beolvasott ·llom·ny:", f·jlnÈv, 2
-    Set rs = db.OpenRecordset(t·bla)
+    'Set h√°tt√©rdb =
+    ' ha az √∫tvonal v√©g√©n nincs \, akkor hozz√°f≈±zz√ºk, [de ha van, akkor meg nem :)]
+    f√°jl = f√°jln√©v
+    ' megnyitjuk az Excel t√°bl√°t
+    Set objBook = objExcel.Workbooks.Open(f√°jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
+    logba "Beolvasott √°llom√°ny:", f√°jln√©v, 2
+    Set rs = db.OpenRecordset(t√°bla)
     
-        If lnCsoport = 1 Then 'Havi lÈtsz·mjelentÈs t·bla...
-            xlT·blaEred = "Fedlap"
-            Set objSheet = objBook.Worksheets(xlT·blaEred)
-            objSheet.Select ' R·ugrunk a lapra
+        If lnCsoport = 1 Then 'Havi l√©tsz√°mjelent√©s t√°bla...
+            xlT√°blaEred = "Fedlap"
+            Set objSheet = objBook.Worksheets(xlT√°blaEred)
+            objSheet.Select ' R√°ugrunk a lapra
             Dim rHJH As DAO.Recordset
-            Dim hat·lyID As Long
+            Dim hat√°lyID As Long
             
-            Set rHJH = db.OpenRecordset("tHaviJelentÈsHat·lya", dbOpenDynaset)
+            Set rHJH = db.OpenRecordset("tHaviJelent√©sHat√°lya", dbOpenDynaset)
             rHJH.AddNew
-            rHJH!hat·lya = objSheet.Range("a2").Value
-            rHJH!f·jlnÈv = f·jl
+            rHJH!hat√°lya = objSheet.Range("a2").Value
+            rHJH!f√°jln√©v = f√°jl
             rHJH.Update
             
             rHJH.Bookmark = rHJH.LastModified
-            hat·lyID = rHJH!hat·lyaID
+            hat√°lyID = rHJH!hat√°lyaID
             rHJH.Close
             Set rHJH = Nothing
         End If
     Do Until rs.EOF
-        Erase …rtÈkek
+        Erase √ârt√©kek
         If rs("Csoport") = lnCsoport Then
             
-            accT·bla = rs("AccessNÈv")
-            xlT·blaEred = rs("EredetiNÈv"): 'Debug.Print xlT·blaEred & " -- " & accT·bla
-            Set objSheet = objBook.Worksheets(xlT·blaEred)
-            xlVÈgcella = Nz(rs("VÈgcella"), "")
-            If xlVÈgcella = "" Then
-                xlHosszmÈrı = rs("HosszmÈrıCella")
-                xlUtolsÛOszlop = rs("UtolsÛOszlop")
-                intVÈgcella = objSheet.Range(xlHosszmÈrı & 1).Column
-                xlVÈgcella = objSheet.Cells(objSheet.Cells.Rows.count, intVÈgcella).End(xlUp).row
-                xlVÈgcella = xlUtolsÛOszlop & xlVÈgcella
-                logba , "hosszcella: " & xlHosszmÈrı & ", utolsÛ oszl.: " & xlUtolsÛOszlop & ", VÈgcella: " & xlVÈgcella, 3
+            accT√°bla = rs("AccessN√©v")
+            xlT√°blaEred = rs("EredetiN√©v"): 'Debug.Print xlT√°blaEred & " -- " & accT√°bla
+            Set objSheet = objBook.Worksheets(xlT√°blaEred)
+            xlV√©gcella = Nz(rs("V√©gcella"), "")
+            If xlV√©gcella = "" Then
+                xlHosszm√©r≈ë = rs("Hosszm√©r≈ëCella")
+                xlUtols√≥Oszlop = rs("Utols√≥Oszlop")
+                intV√©gcella = objSheet.Range(xlHosszm√©r≈ë & 1).Column
+                xlV√©gcella = objSheet.Cells(objSheet.Cells.Rows.count, intV√©gcella).End(xlUp).row
+                xlV√©gcella = xlUtols√≥Oszlop & xlV√©gcella
+                logba , "hosszcella: " & xlHosszm√©r≈ë & ", utols√≥ oszl.: " & xlUtols√≥Oszlop & ", V√©gcella: " & xlV√©gcella, 3
             End If
             
-                If DCount("[Name]", "MSysObjects", "[Name] = '" & accT·bla & "'") = 1 Then
-                        CurrentDb.Execute "DELETE FROM [" & accT·bla & "]", dbFailOnError
+                If DCount("[Name]", "MSysObjects", "[Name] = '" & accT√°bla & "'") = 1 Then
+                        CurrentDb.Execute "DELETE FROM [" & accT√°bla & "]", dbFailOnError
 
                     Else
-                        CurrentDb.Execute "DELETE FROM [" & accT·bla & "_tart]", dbFailOnError
-                        DoCmd.CopyObject strH·ttÈrDb, accT·bla, acTable, accT·bla & "_tart"
+                        CurrentDb.Execute "DELETE FROM [" & accT√°bla & "_tart]", dbFailOnError
+                        DoCmd.CopyObject strH√°tt√©rDb, accT√°bla, acTable, accT√°bla & "_tart"
                     End If
-                If CsakSz·m(rs("KezdıCella")) < CsakSz·m(xlVÈgcella) Then
+                If CsakSz√°m(rs("Kezd≈ëCella")) < CsakSz√°m(xlV√©gcella) Then
                     With objSheet
-                        .Range(.Range(rs("KezdıCella")), .Range(xlVÈgcella)).Name = accT·bla 'Elnevezz¸k a ter¸letet
-                        sFoly ˚rlap, accT·bla & ":;" & .Range(accT·bla).Rows.count
-                        logba , .Range(accT·bla).Rows.count, 3
+                        .Range(.Range(rs("Kezd≈ëCella")), .Range(xlV√©gcella)).Name = accT√°bla 'Elnevezz√ºk a ter√ºletet
+                        sFoly ≈±rlap, accT√°bla & ":;" & .Range(accT√°bla).Rows.count
+                        logba , .Range(accT√°bla).Rows.count, 3
                     End With
                     
             
-                    'Elkezdj¸k az adatok betˆltÈsÈt
-                    Set rsCÈl = db.OpenRecordset(accT·bla)
+                    'Elkezdj√ºk az adatok bet√∂lt√©s√©t
+                    Set rsC√©l = db.OpenRecordset(accT√°bla)
             
-                    …rtÈkek = objSheet.Range(accT·bla).Value
-                    logba , "Az " & accT·bla & " ter¸letrıl az adatokat beolvastuk."
-                    logba , "A cÈlt·bla:" & rsCÈl.Name
+                    √ârt√©kek = objSheet.Range(accT√°bla).Value
+                    logba , "Az " & accT√°bla & " ter√ºletr≈ël az adatokat beolvastuk."
+                    logba , "A c√©lt√°bla:" & rsC√©l.Name
             
-                    For sor = LBound(…rtÈkek, 1) To UBound(…rtÈkek, 1)
-                        intMezı = 0
-                        '˙j rekord hozz·ad·sa kezdıdik...
-                        rsCÈl.AddNew
-                        For oszlop = LBound(…rtÈkek, 2) To UBound(…rtÈkek, 2)
-                            If rsCÈl.Fields.count < oszlop Then
+                    For sor = LBound(√ârt√©kek, 1) To UBound(√ârt√©kek, 1)
+                        intMez≈ë = 0
+                        '√∫j rekord hozz√°ad√°sa kezd≈ëdik...
+                        rsC√©l.AddNew
+                        For oszlop = LBound(√ârt√©kek, 2) To UBound(√ârt√©kek, 2)
+                            If rsC√©l.Fields.count < oszlop Then
                                 Exit For
                             End If
-                            intMezı = oszlop - 1
+                            intMez≈ë = oszlop - 1
             
-                            rsCÈl.Fields(intMezı) = konverter(rsCÈl.Fields(intMezı), …rtÈkek(sor, oszlop))
+                            rsC√©l.Fields(intMez≈ë) = konverter(rsC√©l.Fields(intMez≈ë), √ârt√©kek(sor, oszlop))
                             
                         Next oszlop
-                        rsCÈl.Fields(oszlop - 1) = hat·lyID
-                        rsCÈl.Update
-                        '˙j rekord hozz·ad·sa vÈget Èrt
+                        rsC√©l.Fields(oszlop - 1) = hat√°lyID
+                        rsC√©l.Update
+                        '√∫j rekord hozz√°ad√°sa v√©get √©rt
                     Next sor
-                    logba , "Az " & accT·bla & " nev˚ t·bl·ba az adatokat beÌrtuk:" & sor & " sor."
-                    logba , "Az " & accT·bla & " beolvas·sa megtˆrtÈnt."
+                    logba , "Az " & accT√°bla & " nev≈± t√°bl√°ba az adatokat be√≠rtuk:" & sor & " sor."
+                    logba , "Az " & accT√°bla & " beolvas√°sa megt√∂rt√©nt."
                 Else
-                    logba , "Az " & accT·bla & " nev˚ t·bl·ba nem Ìrtunk adatokat, mert ¸res volt."
-                    logba , "Az " & accT·bla & " beolvas·sa megtˆrtÈnt."
+                    logba , "Az " & accT√°bla & " nev≈± t√°bl√°ba nem √≠rtunk adatokat, mert √ºres volt."
+                    logba , "Az " & accT√°bla & " beolvas√°sa megt√∂rt√©nt."
                 End If
 
         End If
         rs.MoveNext
-        intVÈgcella = 0
+        intV√©gcella = 0
     Loop
-    logba , objBook.Name & " bez·r·sa mentÈs nÈlk¸l...", 3
-    fvHaviT·blaImport = True
-    GoTo TisztÌt·s
+    logba , objBook.Name & " bez√°r√°sa ment√©s n√©lk√ºl...", 3
+    fvHaviT√°blaImport = True
+    GoTo Tiszt√≠t√°s
 fvki
 Exit Function
 
-TisztÌt·s:
+Tiszt√≠t√°s:
     On Error Resume Next
     
     If Not rs Is Nothing Then rs.Close: Set rs = Nothing
-    If Not rsCÈl Is Nothing Then rsCÈl.Close: Set rsCÈl = Nothing
+    If Not rsC√©l Is Nothing Then rsC√©l.Close: Set rsC√©l = Nothing
     If Not rHJH Is Nothing Then rHJH.Close: Set rHJH = Nothing
     If Not db Is Nothing Then db.Close: Set db = Nothing
 
@@ -267,140 +267,140 @@ Exit Function
 Hiba:
     logba , Err.Number & Err.Description, 0
     Hiba Err
-    fvHaviT·blaImport = False
-    ' Objektumok felszabadÌt·sa, ha eddig mÈg nem tˆrtÈnt volna meg...
-    Resume TisztÌt·s
+    fvHaviT√°blaImport = False
+    ' Objektumok felszabad√≠t√°sa, ha eddig m√©g nem t√∂rt√©nt volna meg...
+    Resume Tiszt√≠t√°s
 End Function
 
-Public Function fvLej·rÛHat·ridıkImport(f·jlnÈv As String, ˚rlap As Object) As Boolean
-fvbe ("fvLej·rÛHat·ridıkImport")
-'Licencia: MIT Ol·h Zolt·n 2022 (c)
-    'Az Excel megnyit·s·hoz
+Public Function fvLej√°r√≥Hat√°rid≈ëkImport(f√°jln√©v As String, ≈±rlap As Object) As Boolean
+fvbe ("fvLej√°r√≥Hat√°rid≈ëkImport")
+'Licencia: MIT Ol√°h Zolt√°n 2022 (c)
+    'Az Excel megnyit√°s√°hoz
     Dim objExcel        As Excel.Application
     Dim objBook         As Excel.Workbook
     Dim objSheet        As Excel.Worksheet
     Dim objRange        As Excel.Range
     
-    Dim xlT·bla         As String
-    Dim xlT·blaEred     As String
-    Dim xlVÈgcella      As String
+    Dim xlT√°bla         As String
+    Dim xlT√°blaEred     As String
+    Dim xlV√©gcella      As String
     
-    Dim xlUtolsÛOszlop  As String
-    Dim intVÈgcella     As Integer
-    Dim xlHosszmÈrı     As String
+    Dim xlUtols√≥Oszlop  As String
+    Dim intV√©gcella     As Integer
+    Dim xlHosszm√©r≈ë     As String
     
-    Dim …rtÈkek()       As Variant
-    Dim intMezı         As Integer
+    Dim √ârt√©kek()       As Variant
+    Dim intMez≈ë         As Integer
     
-    'Az adatb·zis megnyit·s·hoz
-    Dim db              As DAO.Database     'Ez lesz az adatb·zisunk
-    Dim rs              As DAO.Recordset    'A beolvasandÛ lapok Ès ter¸letek adatait tartalmazÛ t·bl·nak
-    Dim rsCÈl           As DAO.Recordset    'Ahov· m·solunk
-    Dim f·jl            As String
+    'Az adatb√°zis megnyit√°s√°hoz
+    Dim db              As DAO.Database     'Ez lesz az adatb√°zisunk
+    Dim rs              As DAO.Recordset    'A beolvasand√≥ lapok √©s ter√ºletek adatait tartalmaz√≥ t√°bl√°nak
+    Dim rsC√©l           As DAO.Recordset    'Ahov√° m√°solunk
+    Dim f√°jl            As String
     
-    Dim EredmÈny        As Integer
-    Dim t·bla           As String           'A t·bla : a t·bl·k jellemzıit t·rolÛ t·bla
+    Dim Eredm√©ny        As Integer
+    Dim t√°bla           As String           'A t√°bla : a t√°bl√°k jellemz≈ëit t√°rol√≥ t√°bla
     
-    'Sz·ml·l·shoz
+    'Sz√°ml√°l√°shoz
     Dim sor, oszlop As Integer
     
-    t·bla = "tImport·landÛT·bl·k"
-    intVÈgcella = 0
+    t√°bla = "tImport√°land√≥T√°bl√°k"
+    intV√©gcella = 0
 'On Error GoTo hiba
     
     Set objExcel = CreateObject("Excel.Application")
     Set db = CurrentDb()
-    ' ha az ˙tvonal vÈgÈn nincs \, akkor hozz·f˚zz¸k, [de ha van, akkor meg nem :)]
-    f·jl = f·jlnÈv
-    ' megnyitjuk az Excel t·bl·t
-    Set objBook = objExcel.Workbooks.Open(f·jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
+    ' ha az √∫tvonal v√©g√©n nincs \, akkor hozz√°f≈±zz√ºk, [de ha van, akkor meg nem :)]
+    f√°jl = f√°jln√©v
+    ' megnyitjuk az Excel t√°bl√°t
+    Set objBook = objExcel.Workbooks.Open(f√°jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
     
-    Set rs = db.OpenRecordset(t·bla)
+    Set rs = db.OpenRecordset(t√°bla)
     rs.MoveLast
     rs.MoveFirst
-    sFoly ˚rlap, "T·bla neve;Beolvasott sorok sz·ma"
+    sFoly ≈±rlap, "T√°bla neve;Beolvasott sorok sz√°ma"
     
     Do Until rs.EOF
     
-        Erase …rtÈkek
-        xlT·bla = rs("AccessNÈv")
+        Erase √ârt√©kek
+        xlT√°bla = rs("AccessN√©v")
         
-        If xlT·bla = "tLej·rÛHat·ridık" Then
-            xlT·blaEred = rs("EredetiNÈv"): Debug.Print xlT·blaEred & " -- " & xlT·bla
+        If xlT√°bla = "tLej√°r√≥Hat√°rid≈ëk" Then
+            xlT√°blaEred = rs("EredetiN√©v"): Debug.Print xlT√°blaEred & " -- " & xlT√°bla
             
-            Set objSheet = objBook.Worksheets(xlT·blaEred)
-            objSheet.Select ' R·ugrunk a lapra
-            If Nz(rs("VÈgcella"), "") = "" Then
-                xlHosszmÈrı = rs("HosszmÈrıCella")
-                xlUtolsÛOszlop = rs("UtolsÛOszlop")
+            Set objSheet = objBook.Worksheets(xlT√°blaEred)
+            objSheet.Select ' R√°ugrunk a lapra
+            If Nz(rs("V√©gcella"), "") = "" Then
+                xlHosszm√©r≈ë = rs("Hosszm√©r≈ëCella")
+                xlUtols√≥Oszlop = rs("Utols√≥Oszlop")
                 '
-                ' rs("HosszmÈrıCella") -- a hosszmÈrÈsre haszn·lt oszlopot keresi ki az adatb·zisbÛl.
-                ' objBook.ActiveSheet.Range(rs("HosszmÈrıCella")&1).Column  -- a hosszmÈrı cella oszlop·nak a sz·m·t adja meg.
-                ' Cells(Rows.Count, 1).End(xlUp).Row -- az elsı oszlopban tal·lhatÛ cell·k sz·m·t adja
-                ' Cells(Rows.Count, ActiveSheet.Range(rs("HosszmÈrıCella")&1).Column).End(xlUp).Row -- a hosszmÈrı cella oszlop·ban a legalsÛ haszn·lt cella sor·nak a sz·ma?
-                intVÈgcella = objSheet.Range(xlHosszmÈrı & 1).Column
-                xlVÈgcella = objSheet.Cells(objSheet.Cells.Rows.count, intVÈgcella).End(xlUp).row
-                xlVÈgcella = xlUtolsÛOszlop & xlVÈgcella
+                ' rs("Hosszm√©r≈ëCella") -- a hosszm√©r√©sre haszn√°lt oszlopot keresi ki az adatb√°zisb√≥l.
+                ' objBook.ActiveSheet.Range(rs("Hosszm√©r≈ëCella")&1).Column  -- a hosszm√©r≈ë cella oszlop√°nak a sz√°m√°t adja meg.
+                ' Cells(Rows.Count, 1).End(xlUp).Row -- az els≈ë oszlopban tal√°lhat√≥ cell√°k sz√°m√°t adja
+                ' Cells(Rows.Count, ActiveSheet.Range(rs("Hosszm√©r≈ëCella")&1).Column).End(xlUp).Row -- a hosszm√©r≈ë cella oszlop√°ban a legals√≥ haszn√°lt cella sor√°nak a sz√°ma?
+                intV√©gcella = objSheet.Range(xlHosszm√©r≈ë & 1).Column
+                xlV√©gcella = objSheet.Cells(objSheet.Cells.Rows.count, intV√©gcella).End(xlUp).row
+                xlV√©gcella = xlUtols√≥Oszlop & xlV√©gcella
             Else
-                xlVÈgcella = rs("VÈgcella")
+                xlV√©gcella = rs("V√©gcella")
             End If
             With objSheet
-                .Range(.Range(rs("KezdıCella")), .Range(xlVÈgcella)).Name = xlT·bla 'Elnevezz¸k a ter¸letet
-                sFoly ˚rlap, xlT·bla & ":;" & .Range(xlT·bla).Rows.count
-                Debug.Print .Range(xlT·bla).Rows.count
+                .Range(.Range(rs("Kezd≈ëCella")), .Range(xlV√©gcella)).Name = xlT√°bla 'Elnevezz√ºk a ter√ºletet
+                sFoly ≈±rlap, xlT√°bla & ":;" & .Range(xlT√°bla).Rows.count
+                Debug.Print .Range(xlT√°bla).Rows.count
                 
             End With
             
             
-            If DCount("[Name]", "MSysObjects", "[Name] = '" & xlT·bla & "'") = 1 Then
-                                    sFoly ˚rlap, xlT·bla & ":;t·bla tˆrlÈse"
-                CurrentDb.Execute ("DELETE * FROM " & xlT·bla)
-                                    sFoly ˚rlap, xlT·bla & ":;t·bla tˆrˆlve"
-                'DoCmd.Rename xlT·bla & RIC(Now()), acTable, xlT·bla
+            If DCount("[Name]", "MSysObjects", "[Name] = '" & xlT√°bla & "'") = 1 Then
+                                    sFoly ≈±rlap, xlT√°bla & ":;t√°bla t√∂rl√©se"
+                CurrentDb.Execute ("DELETE * FROM " & xlT√°bla)
+                                    sFoly ≈±rlap, xlT√°bla & ":;t√°bla t√∂r√∂lve"
+                'DoCmd.Rename xlT√°bla & RIC(Now()), acTable, xlT√°bla
             Else
-                DoCmd.CopyObject , xlT·bla, acTable, xlT·bla & "_tart"
+                DoCmd.CopyObject , xlT√°bla, acTable, xlT√°bla & "_tart"
             End If
     
-            'Elkezdj¸k az adatok betˆltÈsÈt
-            Set rsCÈl = db.OpenRecordset(xlT·bla)
+            'Elkezdj√ºk az adatok bet√∂lt√©s√©t
+            Set rsC√©l = db.OpenRecordset(xlT√°bla)
     
-            …rtÈkek = objSheet.Range(xlT·bla).Value
-            sFoly ˚rlap, "Az " & xlT·bla & " ter¸letrıl az adatokat; beolvastuk."
-            sFoly ˚rlap, "A cÈlt·bla:;" & rsCÈl.Name
+            √ârt√©kek = objSheet.Range(xlT√°bla).Value
+            sFoly ≈±rlap, "Az " & xlT√°bla & " ter√ºletr≈ël az adatokat; beolvastuk."
+            sFoly ≈±rlap, "A c√©lt√°bla:;" & rsC√©l.Name
     
-            For sor = LBound(…rtÈkek, 1) To UBound(…rtÈkek, 1)
+            For sor = LBound(√ârt√©kek, 1) To UBound(√ârt√©kek, 1)
                 
-                    intMezı = 0
-                    '˙j rekord hozz·ad·sa kezdıdik...
-                    rsCÈl.AddNew
-                    For oszlop = LBound(…rtÈkek, 2) To UBound(…rtÈkek, 2)
-                        If rsCÈl.Fields.count < oszlop Then
+                    intMez≈ë = 0
+                    '√∫j rekord hozz√°ad√°sa kezd≈ëdik...
+                    rsC√©l.AddNew
+                    For oszlop = LBound(√ârt√©kek, 2) To UBound(√ârt√©kek, 2)
+                        If rsC√©l.Fields.count < oszlop Then
                             Exit For
                         End If
-                        intMezı = oszlop - 1
+                        intMez≈ë = oszlop - 1
                         'Debug.Print sor & ":" & oszlop & " = "
-                        'Debug.Print …rtÈkek(sor, oszlop)
-                        'Debug.Print " Type:" & rsCÈl.Fields(intMezı).Type
+                        'Debug.Print √ârt√©kek(sor, oszlop)
+                        'Debug.Print " Type:" & rsC√©l.Fields(intMez≈ë).Type
                     'On Error GoTo Hiba
-                        rsCÈl.Fields(intMezı) = konverter(rsCÈl.Fields(intMezı), …rtÈkek(sor, oszlop))
+                        rsC√©l.Fields(intMez≈ë) = konverter(rsC√©l.Fields(intMez≈ë), √ârt√©kek(sor, oszlop))
                     On Error GoTo 0
                         
                     Next oszlop
-                    rsCÈl.Update
-                    '˙j rekord hozz·ad·sa vÈget Èrt
+                    rsC√©l.Update
+                    '√∫j rekord hozz√°ad√°sa v√©get √©rt
                 
             Next sor
-            sFoly ˚rlap, "Az " & xlT·bla & " nev˚ t·bl·ba az adatokat beÌrtuk:;" & sor & " sor."
-            sFoly ˚rlap, "Az " & xlT·bla & " beolvas·sa megtˆrtÈnt."
+            sFoly ≈±rlap, "Az " & xlT√°bla & " nev≈± t√°bl√°ba az adatokat be√≠rtuk:;" & sor & " sor."
+            sFoly ≈±rlap, "Az " & xlT√°bla & " beolvas√°sa megt√∂rt√©nt."
         End If
         rs.MoveNext
-        intVÈgcella = 0
+        intV√©gcella = 0
 
     Loop
-    logba , objBook.Name & " bez·r·sa mentÈs nÈlk¸l...", 3
+    logba , objBook.Name & " bez√°r√°sa ment√©s n√©lk√ºl...", 3
     objBook.Close SaveChanges:=False
     
-fvLej·rÛHat·ridıkImport = True
+fvLej√°r√≥Hat√°rid≈ëkImport = True
     logba sFN, "Sikerrel lefutott!"
 fvki
 Exit Function
@@ -408,48 +408,48 @@ Exit Function
 
 Hiba:
     If Err.Number = 3759 Then
-        logba sFN, "hiba sz·ma:" & 3759, 0
+        logba sFN, "hiba sz√°ma:" & 3759, 0
         Resume Next
     End If
 logba sFN, Err.Number & ", " & Err.Description, 0
-fvLej·rÛHat·ridıkImport = False
+fvLej√°r√≥Hat√°rid≈ëkImport = False
 
 End Function
 
-Public Function tT·blaImport(strF·jl As String, ˚rlap As Form, t·blanÈv As String)
-fvbe ("tT·blaImport")
+Public Function tT√°blaImport(strF√°jl As String, ≈±rlap As Form, t√°blan√©v As String)
+fvbe ("tT√°blaImport")
 On Error GoTo ErrorHandler
 
     Dim importSpecName As String
     Dim strHiba As String
 '    Dim strXML As String
-'    Dim strRÈgiF·jl As String
-'    Dim str⁄jF·jl As String
+'    Dim strR√©giF√°jl As String
+'    Dim str√öjF√°jl As String
 '    Dim intKezdPoz As Integer
-'    Dim intVÈgPoz As Integer
-    Dim ‹zenet As String
-    Dim v·lasz As Boolean
+'    Dim intV√©gPoz As Integer
+    Dim √ºzenet As String
+    Dim v√°lasz As Boolean
     
-    importSpecName = t·blanÈv 'pl.:"tAdatv·ltoztat·siIgÈnyek"
+    importSpecName = t√°blan√©v 'pl.:"tAdatv√°ltoztat√°siIg√©nyek"
 
-    If strF·jl <> "" Then
+    If strF√°jl <> "" Then
 
-                                                   ' sFoly €rlap, importSpecName & ":; import·l·s ¸res oszlopok tˆrlÈse..."
-       ' UresOszlopokTorlese strF·jl 'A megadott ·llom·nybÛl tˆrˆlj¸k az ¸res oszlopokat
-'#           ¡tÌrjuk az XML-t:
-                                                    sFoly ˚rlap, importSpecName & ":; mentett import ·talakÌt·sa"
-        v·lasz = XML·talakÌtÛ(importSpecName, strF·jl)
+                                                   ' sFoly ≈∞rlap, importSpecName & ":; import√°l√°s √ºres oszlopok t√∂rl√©se..."
+       ' UresOszlopokTorlese strF√°jl 'A megadott √°llom√°nyb√≥l t√∂r√∂lj√ºk az √ºres oszlopokat
+'#           √Åt√≠rjuk az XML-t:
+                                                    sFoly ≈±rlap, importSpecName & ":; mentett import √°talak√≠t√°sa"
+        v√°lasz = XML√°talak√≠t√≥(importSpecName, strF√°jl)
         
 
-                                                    sFoly ˚rlap, importSpecName & ":; import·l·s indÌt·sa"
-'#           Az ·tÌrt XML-lel pedig futtatjuk a mentett importot
+                                                    sFoly ≈±rlap, importSpecName & ":; import√°l√°s ind√≠t√°sa"
+'#           Az √°t√≠rt XML-lel pedig futtatjuk a mentett importot
         DoCmd.RunSavedImportExport importSpecName
-                                                    sFoly ˚rlap, importSpecName & ":; import·l·s vÈget Èrt"
-                                                    sFoly ˚rlap, importSpecName & ":; " & DCount("*", t·blanÈv) & " sor."
+                                                    sFoly ≈±rlap, importSpecName & ":; import√°l√°s v√©get √©rt"
+                                                    sFoly ≈±rlap, importSpecName & ":; " & DCount("*", t√°blan√©v) & " sor."
     End If
-   tT·blaImport = True
+   tT√°blaImport = True
     
-KilÈpÈs:
+Kil√©p√©s:
     fvki
     Exit Function
 
@@ -458,128 +458,128 @@ ErrorHandler:
 
     MsgBox strHiba, vbExclamation + vbOKOnly, "Error"
     logba , strHiba
-    tT·blaImport = False
-    Resume KilÈpÈs
+    tT√°blaImport = False
+    Resume Kil√©p√©s
 End Function
 
 
-Public Function SzervezetiT·blaImport(f·jlnÈv As String, ˚rlap As Object) As Boolean
-fvbe ("SzervezetiT·blaImport")
-    'MIT Ol·h Zolt·n 2022
-    'Az Excel megnyit·s·hoz
+Public Function SzervezetiT√°blaImport(f√°jln√©v As String, ≈±rlap As Object) As Boolean
+fvbe ("SzervezetiT√°blaImport")
+    'MIT Ol√°h Zolt√°n 2022
+    'Az Excel megnyit√°s√°hoz
     Dim objExcel       As Excel.Application
     Dim objBook         As Excel.Workbook
     Dim objSheet        As Excel.Worksheet
     Dim objRange        As Excel.Range
     Dim objRange2       As Excel.Range
     
-    Dim accT·bla         As String
-    Dim xlT·blaEred     As String
-    Dim xlVÈgcella      As String
+    Dim accT√°bla         As String
+    Dim xlT√°blaEred     As String
+    Dim xlV√©gcella      As String
     
-    Dim xlUtolsÛOszlop  As Integer
-    Dim intVÈgcella     As Integer
-    Dim xlHosszmÈrı     As Integer
+    Dim xlUtols√≥Oszlop  As Integer
+    Dim intV√©gcella     As Integer
+    Dim xlHosszm√©r≈ë     As Integer
     
-    Dim …rtÈkek()       As Variant
-    Dim intMezı         As Integer
+    Dim √ârt√©kek()       As Variant
+    Dim intMez≈ë         As Integer
     
-    'Az adatb·zis megnyit·s·hoz
-    Dim db              As DAO.Database     'Ez lesz az adatb·zisunk
-    Dim rs              As DAO.Recordset    'A beolvasandÛ lapok Ès ter¸letek adatait tartalmazÛ t·bl·nak
-    Dim rsCÈl           As DAO.Recordset    'Ahov· m·solunk
-    Dim f·jl            As String
-    Dim archf·jl        As String           'A rÈgi f·jl archiv·l·s ut·ni neve
+    'Az adatb√°zis megnyit√°s√°hoz
+    Dim db              As DAO.Database     'Ez lesz az adatb√°zisunk
+    Dim rs              As DAO.Recordset    'A beolvasand√≥ lapok √©s ter√ºletek adatait tartalmaz√≥ t√°bl√°nak
+    Dim rsC√©l           As DAO.Recordset    'Ahov√° m√°solunk
+    Dim f√°jl            As String
+    Dim archf√°jl        As String           'A r√©gi f√°jl archiv√°l√°s ut√°ni neve
     
-    Dim EredmÈny        As Integer
-    Dim t·bla           As String           'A t·bla : a t·bl·k jellemzıit t·rolÛ t·bla
+    Dim Eredm√©ny        As Integer
+    Dim t√°bla           As String           'A t√°bla : a t√°bl√°k jellemz≈ëit t√°rol√≥ t√°bla
     
-    'A szˆveges kimenethez
-    Dim ‹zenet As String
+    'A sz√∂veges kimenethez
+    Dim √ºzenet As String
     
-    'Sz·ml·l·shoz
+    'Sz√°ml√°l√°shoz
     Dim sor, oszlop     As Integer
     Dim ehj             As New ehjoszt
-    Dim elızıszakasz    As Integer
-    Dim SzakaszSz·m     As Integer
+    Dim el≈ëz≈ëszakasz    As Integer
+    Dim SzakaszSz√°m     As Integer
     
     
 'On Error GoTo Hiba
-    accT·bla = "tSzervezeti"
-    xlT·blaEred = "Szervezeti alapriport"
+    accT√°bla = "tSzervezeti"
+    xlT√°blaEred = "Szervezeti alapriport"
     
     Set objExcel = CreateObject("Excel.Application")
     Set db = CurrentDb()
-    ' ha az ˙tvonal vÈgÈn nincs \, akkor hozz·f˚zz¸k, [de ha van, akkor meg nem :)]
-    f·jl = f·jlnÈv
-    If Not (vane(f·jl)) Then 'Ha nincs ilyen f·jl, akkor kisz·llunk...
-        SzervezetiT·blaImport = False
-        sFoly ˚rlap, accT·bla & ":;f·jl nem tal·lhatÛ, ·tugorjuk"
+    ' ha az √∫tvonal v√©g√©n nincs \, akkor hozz√°f≈±zz√ºk, [de ha van, akkor meg nem :)]
+    f√°jl = f√°jln√©v
+    If Not (vane(f√°jl)) Then 'Ha nincs ilyen f√°jl, akkor kisz√°llunk...
+        SzervezetiT√°blaImport = False
+        sFoly ≈±rlap, accT√°bla & ":;f√°jl nem tal√°lhat√≥, √°tugorjuk"
         Exit Function
     End If
-    ' megnyitjuk az Excel t·bl·t
-    Set objBook = objExcel.Workbooks.Open(f·jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
+    ' megnyitjuk az Excel t√°bl√°t
+    Set objBook = objExcel.Workbooks.Open(f√°jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
     
 
 
-    Set rsCÈl = Nothing
+    Set rsC√©l = Nothing
 
-'Az import·landÛ ter¸letet az objRange-be tessz¸k
-    Set objSheet = objBook.Worksheets(xlT·blaEred)
+'Az import√°land√≥ ter√ºletet az objRange-be tessz√ºk
+    Set objSheet = objBook.Worksheets(xlT√°blaEred)
     objSheet.Activate
     
     Set objRange = objSheet.Range("A2").CurrentRegion
-        xlUtolsÛOszlop = objRange.Columns.count
-        xlHosszmÈrı = objRange.Rows.count
+        xlUtols√≥Oszlop = objRange.Columns.count
+        xlHosszm√©r≈ë = objRange.Rows.count
 
     With objRange
-        Set objRange2 = .Range(.Cells(2, 1), objRange.Cells(xlHosszmÈrı, xlUtolsÛOszlop + 0))  'leszedj¸k az elsı sort
+        Set objRange2 = .Range(.Cells(2, 1), objRange.Cells(xlHosszm√©r≈ë, xlUtols√≥Oszlop + 0))  'leszedj√ºk az els≈ë sort
     End With
-    sFoly ˚rlap, accT·bla & ":;" & xlHosszmÈrı & " sor"
-                'Debug.Print "Sorok sz·ma:" & xlHosszmÈrı & ", oszlopok sz·ma:" & xlUtolsÛOszlop
+    sFoly ≈±rlap, accT√°bla & ":;" & xlHosszm√©r≈ë & " sor"
+                'Debug.Print "Sorok sz√°ma:" & xlHosszm√©r≈ë & ", oszlopok sz√°ma:" & xlUtols√≥Oszlop
    
-    Erase …rtÈkek
+    Erase √ârt√©kek
 
-    If DCount("[Name]", "MSysObjects", "[Name] = '" & accT·bla & "'") = 1 Then 'Ha van m·r accT·bla nev˚ t·bla, akkor
-        archf·jl = accT·bla & RIC(Now())
-        DoCmd.CopyObject , archf·jl, acTable, accT·bla 'kÈszÌt¸nk egy tartalÈk m·solatot
-        db.Execute ("Delete * From [" & accT·bla & "];") 'majd (az accT·bla t·bl·t) ki¸rÌtj¸k
-        sFoly ˚rlap, accT·bla & ":;Az elızı t·bl·t " & archf·jl & " nÈven archiv·ltuk."
+    If DCount("[Name]", "MSysObjects", "[Name] = '" & accT√°bla & "'") = 1 Then 'Ha van m√°r accT√°bla nev≈± t√°bla, akkor
+        archf√°jl = accT√°bla & RIC(Now())
+        DoCmd.CopyObject , archf√°jl, acTable, accT√°bla 'k√©sz√≠t√ºnk egy tartal√©k m√°solatot
+        db.Execute ("Delete * From [" & accT√°bla & "];") 'majd (az accT√°bla t√°bl√°t) ki√ºr√≠tj√ºk
+        sFoly ≈±rlap, accT√°bla & ":;Az el≈ëz≈ë t√°bl√°t " & archf√°jl & " n√©ven archiv√°ltuk."
     End If
     
     ehj.Ini 100
-    'Elkezdj¸k az adatok betˆltÈsÈt
-    Set rsCÈl = db.OpenRecordset(accT·bla)
-    …rtÈkek = objRange2.Value
-    elızıszakasz = 0
-    SzakaszSz·m = 8 '12,5%-konkÈnt jelezz¸k ki az ÈrtÈket
-    ehj.oszlopszam = UBound(…rtÈkek, 1) - (LBound(…rtÈkek, 1) + 1) 'Itt az oszlopsz·m a sorokat jelˆli :)
-    For sor = LBound(…rtÈkek, 1) + 1 To UBound(…rtÈkek, 1)
-        intMezı = 0
-        '˙j rekord hozz·ad·sa kezdıdik...
-        rsCÈl.AddNew
-        For oszlop = LBound(…rtÈkek, 2) - 1 To UBound(…rtÈkek, 2)
-            intMezı = oszlop
-            If intMezı <> 0 Then
-                rsCÈl.Fields(intMezı) = konverter(rsCÈl.Fields(intMezı), …rtÈkek(sor, oszlop))
-                'Debug.Print intMezı, rsCÈl.Fields(intMezı).Name & ": " & …rtÈkek(1, oszlop) & " - " & rsCÈl.Fields(intMezı)
+    'Elkezdj√ºk az adatok bet√∂lt√©s√©t
+    Set rsC√©l = db.OpenRecordset(accT√°bla)
+    √ârt√©kek = objRange2.Value
+    el≈ëz≈ëszakasz = 0
+    SzakaszSz√°m = 8 '12,5%-konk√©nt jelezz√ºk ki az √©rt√©ket
+    ehj.oszlopszam = UBound(√ârt√©kek, 1) - (LBound(√ârt√©kek, 1) + 1) 'Itt az oszlopsz√°m a sorokat jel√∂li :)
+    For sor = LBound(√ârt√©kek, 1) + 1 To UBound(√ârt√©kek, 1)
+        intMez≈ë = 0
+        '√∫j rekord hozz√°ad√°sa kezd≈ëdik...
+        rsC√©l.AddNew
+        For oszlop = LBound(√ârt√©kek, 2) - 1 To UBound(√ârt√©kek, 2)
+            intMez≈ë = oszlop
+            If intMez≈ë <> 0 Then
+                rsC√©l.Fields(intMez≈ë) = konverter(rsC√©l.Fields(intMez≈ë), √ârt√©kek(sor, oszlop))
+                'Debug.Print intMez≈ë, rsC√©l.Fields(intMez≈ë).Name & ": " & √ârt√©kek(1, oszlop) & " - " & rsC√©l.Fields(intMez≈ë)
             End If
  
         Next oszlop
-        If Int(ehj.Value / ehj.oszlopszam * SzakaszSz·m) > elızıszakasz Then
-            sFoly ˚rlap, accT·bla & ":;" & Int(ehj.Value / ehj.oszlopszam * 100) & "% elkÈsz¸lt..."
-            elızıszakasz = Int(ehj.Value / ehj.oszlopszam * SzakaszSz·m)
+        If Int(ehj.Value / ehj.oszlopszam * SzakaszSz√°m) > el≈ëz≈ëszakasz Then
+            sFoly ≈±rlap, accT√°bla & ":;" & Int(ehj.Value / ehj.oszlopszam * 100) & "% elk√©sz√ºlt..."
+            el≈ëz≈ëszakasz = Int(ehj.Value / ehj.oszlopszam * SzakaszSz√°m)
         End If
-        rsCÈl.Update
-        '˙j rekord hozz·ad·sa vÈget Èrt
-        'Debug.Print (sor / xlHosszmÈrı) * 100 & "%"
+        rsC√©l.Update
+        '√∫j rekord hozz√°ad√°sa v√©get √©rt
+        'Debug.Print (sor / xlHosszm√©r≈ë) * 100 & "%"
         ehj.Novel
     Next sor
-    SzervezetiT·blaImport = True 'VisszatÈrÈsi ÈrtÈke Igaz, ha nincs hiba
+    SzervezetiT√°blaImport = True 'Visszat√©r√©si √©rt√©ke Igaz, ha nincs hiba
     
-KilÈpÈs:
+Kil√©p√©s:
     
-    rsCÈl.Close
+    rsC√©l.Close
     Set objRange = Nothing
     Set objRange2 = Nothing
     Set objSheet = Nothing
@@ -591,105 +591,105 @@ Exit Function
 Hiba:
 
     Hiba Err
-    SzervezetiT·blaImport = False 'VisszatÈrÈsi ÈrtÈke Hamis, ha hiba tˆrtÈnt.
-    Resume KilÈpÈs
+    SzervezetiT√°blaImport = False 'Visszat√©r√©si √©rt√©ke Hamis, ha hiba t√∂rt√©nt.
+    Resume Kil√©p√©s
 End Function
 
 
 
-Function ImportT·blaHibaJavÌtÛ(ter¸let As Excel.Range) As Integer
-    'A kapott t·bla (Excel.Range) fejlÈcÈben megkeresi az azonos nev˚eket, Ès a m·sodiktÛl kezdve az oszlop sz·m·t hozz·f˚zi.
-    'Mindekˆzben a neveket trim-eli.
-    'Ha hiba nem tˆrtÈnt:0 ÈrtÈkkel tÈr vissza, egyÈbkÈnt a hibakÛddal
-fvbe ("ImportT·blaHibaJavÌtÛ")
+Function ImportT√°blaHibaJav√≠t√≥(ter√ºlet As Excel.Range) As Integer
+    'A kapott t√°bla (Excel.Range) fejl√©c√©ben megkeresi az azonos nev≈±eket, √©s a m√°sodikt√≥l kezdve az oszlop sz√°m√°t hozz√°f≈±zi.
+    'Mindek√∂zben a neveket trim-eli.
+    'Ha hiba nem t√∂rt√©nt:0 √©rt√©kkel t√©r vissza, egy√©bk√©nt a hibak√≥ddal
+fvbe ("ImportT√°blaHibaJav√≠t√≥")
     On Error GoTo Hiba
-    Dim intOszlopok     As Integer  'Az oszlopok sz·ma
-    Dim i, n            As Integer  'Sz·ml·lÛ
+    Dim intOszlopok     As Integer  'Az oszlopok sz√°ma
+    Dim i, n            As Integer  'Sz√°ml√°l√≥
     Dim varOszlopNevek  As Variant   'Az oszlopok nevei
-    Dim intOszlopSz·m   As Integer  'Az oszlopok sz·ma
-    Dim gy˚jt           As Collection
-    Dim nÈv             As Variant
+    Dim intOszlopSz√°m   As Integer  'Az oszlopok sz√°ma
+    Dim gy≈±jt           As Collection
+    Dim n√©v             As Variant
     
-    intOszlopSz·m = ter¸let.Columns.count
-    ReDim varOszlopNevek(1, intOszlopSz·m)
+    intOszlopSz√°m = ter√ºlet.Columns.count
+    ReDim varOszlopNevek(1, intOszlopSz√°m)
     
-    Set gy˚jt = New Collection
+    Set gy≈±jt = New Collection
     
-    varOszlopNevek = ter¸let.Rows(1)
+    varOszlopNevek = ter√ºlet.Rows(1)
     
-    For i = LBound(varOszlopNevek, 2) To UBound(varOszlopNevek, 2) 'VÈgig lÈpked¸nk az ˆsszes elemen
-        nÈv = varOszlopNevek(1, i)
-        gy˚jt.Add nÈv, nÈv
-        'Ès megkÌsÈrelj¸k betenni egy szÛt·rba. Ha van azonos, akkor hib·ra fut, s a hibakeresı hozz·f˚zi az i-t Ès ˙jra megprÛb·lja.
-        'Debug.Print i, nÈv
+    For i = LBound(varOszlopNevek, 2) To UBound(varOszlopNevek, 2) 'V√©gig l√©pked√ºnk az √∂sszes elemen
+        n√©v = varOszlopNevek(1, i)
+        gy≈±jt.Add n√©v, n√©v
+        '√©s megk√≠s√©relj√ºk betenni egy sz√≥t√°rba. Ha van azonos, akkor hib√°ra fut, s a hibakeres≈ë hozz√°f≈±zi az i-t √©s √∫jra megpr√≥b√°lja.
+        'Debug.Print i, n√©v
     Next i
     
-    For n = 1 To gy˚jt.count
-        ter¸let.Cells(1, n) = Trim(gy˚jt(n)) 'Visszatessz¸k, de egy˙ttal levessz¸k a felesleges szÛkˆzˆket.
+    For n = 1 To gy≈±jt.count
+        ter√ºlet.Cells(1, n) = Trim(gy≈±jt(n)) 'Visszatessz√ºk, de egy√∫ttal levessz√ºk a felesleges sz√≥k√∂z√∂ket.
     Next n
     
-    ImportT·blaHibaJavÌtÛ = 0
+    ImportT√°blaHibaJav√≠t√≥ = 0
 fvki
 Exit Function
 Hiba:
     If Err.Number = 457 Then
-        gy˚jt.Add nÈv & i, nÈv & i
-        logba , nÈv & i, 0
+        gy≈±jt.Add n√©v & i, n√©v & i
+        logba , n√©v & i, 0
         Resume Next
     End If
-    ImportT·blaHibaJavÌtÛ = Err.Number
+    ImportT√°blaHibaJav√≠t√≥ = Err.Number
     
 End Function
-Public Sub t·blagy·rtÛ(Optional ByVal SzervezetiLek As String = "lk_·tvil·gÌt·s_mind_02", Optional ByVal AdatLek As String = "lk__¡tvil·gÌt·shoz_SzemÈlytˆrzs_02")
-'Licencia: MIT Ol·h Zolt·n 2022 (c)
+Public Sub t√°blagy√°rt√≥(Optional ByVal SzervezetiLek As String = "lk_√°tvil√°g√≠t√°s_mind_02", Optional ByVal AdatLek As String = "lk__√Åtvil√°g√≠t√°shoz_Szem√©lyt√∂rzs_02")
+'Licencia: MIT Ol√°h Zolt√°n 2022 (c)
 Dim db As Database
 Dim rst As Recordset
 Dim qdf As QueryDef
 Dim sql As String
-Dim ÈrtÈk As Variant
+Dim √©rt√©k As Variant
 Dim a As Integer
-sql = "Select Distinct [Szervezeti egysÈg] From  [" & SzervezetiLek & "] WHERE [Szervezeti egysÈg] not like '' "
+sql = "Select Distinct [Szervezeti egys√©g] From  [" & SzervezetiLek & "] WHERE [Szervezeti egys√©g] not like '' "
 Set db = CurrentDb()
 Set rst = qdf.OpenRecordset(sql)
 rst.MoveLast
 rst.MoveFirst
 Do Until rst.EOF
-    ÈrtÈk = rst.Fields("Szervezeti egysÈg").Value
-    'Debug.Print ÈrtÈk
-    Call Kimutat·s("O:\¡tvil·gÌt·s\¡tvil·gÌt·s2" & ÈrtÈk & ".xlsx", "SELECT * FROM [" & AdatLek & "] WHERE [Szervezeti egysÈg] = '" & ÈrtÈk & "';")
-    'Debug.Print "O:\¡tvil·gÌt·s\¡tvil·gÌt·s2" & ÈrtÈk & ".xlsx"
+    √©rt√©k = rst.Fields("Szervezeti egys√©g").Value
+    'Debug.Print √©rt√©k
+    Call Kimutat√°s("O:\√Åtvil√°g√≠t√°s\√Åtvil√°g√≠t√°s2" & √©rt√©k & ".xlsx", "SELECT * FROM [" & AdatLek & "] WHERE [Szervezeti egys√©g] = '" & √©rt√©k & "';")
+    'Debug.Print "O:\√Åtvil√°g√≠t√°s\√Åtvil√°g√≠t√°s2" & √©rt√©k & ".xlsx"
     rst.MoveNext
 Loop
 End Sub
-Public Sub Besz·molÛKÈszÌtı()
-'Licencia: MIT Ol·h Zolt·n 2022 (c)
+Public Sub Besz√°mol√≥K√©sz√≠t≈ë()
+'Licencia: MIT Ol√°h Zolt√°n 2022 (c)
 Dim db As Database
 Dim rst As Recordset
 Dim sql As String
-Dim ÈrtÈk As Variant
+Dim √©rt√©k As Variant
 Dim a As Integer
-sql = "Select Distinct [Szervezeti egysÈg] From  lk_·tvil·gÌt·s_mind_02 WHERE [Szervezeti egysÈg] not like '' "
+sql = "Select Distinct [Szervezeti egys√©g] From  lk_√°tvil√°g√≠t√°s_mind_02 WHERE [Szervezeti egys√©g] not like '' "
 Set db = CurrentDb()
 Set rst = db.OpenRecordset(sql, dbOpenDynaset)
 rst.MoveLast
 rst.MoveFirst
 Do Until rst.EOF
-    ÈrtÈk = rst.Fields("Szervezeti egysÈg").Value
-    'Debug.Print ÈrtÈk
-    Call Besz·molÛT·bla("O:\¡tvil·gÌt·s\¡tvil·gÌt·s2" & ÈrtÈk & ".xlsx", "SELECT * FROM lk__¡tvil·gÌt·shoz_SzemÈlytˆrzs_02 WHERE [Szervezeti egysÈg] = '" & ÈrtÈk & "';")
-    'Debug.Print "O:\¡tvil·gÌt·s\¡tvil·gÌt·s2" & ÈrtÈk & ".xlsx"
+    √©rt√©k = rst.Fields("Szervezeti egys√©g").Value
+    'Debug.Print √©rt√©k
+    Call Besz√°mol√≥T√°bla("O:\√Åtvil√°g√≠t√°s\√Åtvil√°g√≠t√°s2" & √©rt√©k & ".xlsx", "SELECT * FROM lk__√Åtvil√°g√≠t√°shoz_Szem√©lyt√∂rzs_02 WHERE [Szervezeti egys√©g] = '" & √©rt√©k & "';")
+    'Debug.Print "O:\√Åtvil√°g√≠t√°s\√Åtvil√°g√≠t√°s2" & √©rt√©k & ".xlsx"
     rst.MoveNext
 Loop
 End Sub
 
-Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
-'****** (c) Ol·h Zolt·n 2022 - MIT Licence ****************
+Sub Besz√°mol√≥T√°bla(f√°jl As String, lek√©rdez√©s As String)
+'****** (c) Ol√°h Zolt√°n 2022 - MIT Licence ****************
  
- 'Az adatb·zishoz
+ 'Az adatb√°zishoz
     Dim db          As Database
     Dim qdf         As QueryDef
     Dim rs          As DAO.Recordset
-    Dim €rlapnÈv    As String
+    Dim ≈∞rlapn√©v    As String
     
     'Excelhez
     Dim sor, oszlop     As Long
@@ -698,11 +698,11 @@ Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
     Dim oWs1, oWs2      As Worksheet
     Dim oWc             As Chart
     
-    'A lÈpegetÈshez
+    'A l√©peget√©shez
     Dim maxoszlop, maxsor As Long
     Dim adat As Variant
-    Dim mezı As Field
-    'Az elırehalad·s-jelzıhˆz
+    Dim mez≈ë As Field
+    'Az el≈ërehalad√°s-jelz≈ëh√∂z
 
     
     'Alapadatok **********************************
@@ -711,25 +711,25 @@ Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
 
     Set db = CurrentDb()
     'Set qdf = db.
-    Set rs = db.OpenRecordset(lekÈrdezÈs)
+    Set rs = db.OpenRecordset(lek√©rdez√©s)
     
     Set oApp = CreateObject("Excel.Application")
     Set oWb = oApp.Workbooks.Add
     Set oWs1 = oWb.Worksheets.Add
     Set oWs2 = oWb.Worksheets.Add(, oWs1)
     
-    oWs1.Name = "TeljesÌtmÈny-ÈrtÈkelÈs"
+    oWs1.Name = "Teljes√≠tm√©ny-√©rt√©kel√©s"
     oWs1.Activate
     
 
-    ' Tartalom kiÌr·sa
+    ' Tartalom ki√≠r√°sa
     
     With rs
         rs.MoveFirst
         rs.MoveLast
-        maxoszlop = .Fields.count  'A leendı oszlopok sz·ma, ah·ny mezı van a lekÈrdezÈsben Ès mÈg egy a sorsz·m miatt
+        maxoszlop = .Fields.count  'A leend≈ë oszlopok sz√°ma, ah√°ny mez≈ë van a lek√©rdez√©sben √©s m√©g egy a sorsz√°m miatt
         maxsor = .RecordCount
-        'Az elırehalad·s-jelzı elıkÈszÌtÈse
+        'Az el≈ërehalad√°s-jelz≈ë el≈ëk√©sz√≠t√©se
 
         .MoveFirst
         For sor = 1 To maxsor
@@ -739,7 +739,7 @@ Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
                 Else
                     adat = .Fields(oszlop - 2).Value
                     With oWs1
-                        .Cells(sor + 1, oszlop).Value = adat  'A sorsz·m oszlop miatt adunk hozz· egyet, Ìgy egyel odÈbb tessz¸k
+                        .Cells(sor + 1, oszlop).Value = adat  'A sorsz√°m oszlop miatt adunk hozz√° egyet, √≠gy egyel od√©bb tessz√ºk
                     End With
                 End If
             Next oszlop
@@ -747,14 +747,14 @@ Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
         Next sor
     End With
     With oWs1
-        .Range(.Cells(1, 1), .Cells(maxsor + 1, maxoszlop)).Name = "TeljesÌtmÈny_ÈrtÈkelÈs"
-        .Range(.Cells(maxsor + 2, 1), .Cells(maxsor + 2, 1)).Value = "*Minden feladatot k¸lˆn sorban kell felt¸ntetni!"
+        .Range(.Cells(1, 1), .Cells(maxsor + 1, maxoszlop)).Name = "Teljes√≠tm√©ny_√©rt√©kel√©s"
+        .Range(.Cells(maxsor + 2, 1), .Cells(maxsor + 2, 1)).Value = "*Minden feladatot k√ºl√∂n sorban kell felt√ºntetni!"
     End With
   
-    'A fejlÈc utÛlag jˆn a tetejÈre
+    'A fejl√©c ut√≥lag j√∂n a tetej√©re
     oszlop = 2
     With oWs1.Cells(1, 1)
-                .Value = "Sorsz·m"
+                .Value = "Sorsz√°m"
                 .Font.Bold = True
                 .Font.Name = "Calibri"
                 .Font.Size = 11
@@ -765,10 +765,10 @@ Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
                 .HorizontalAlignment = xlHAlignCenter
     End With
     oWs1.Columns(oszlop).ColumnWidth = 10
-    For Each mezı In rs.Fields
+    For Each mez≈ë In rs.Fields
         With oWs1
             With .Cells(1, oszlop)
-                .Value = Replace(mezı.Name, "_", ".")
+                .Value = Replace(mez≈ë.Name, "_", ".")
                 .Font.Bold = True
                 .Font.Name = "Calibri"
                 .Font.Size = 11
@@ -785,38 +785,38 @@ Sub Besz·molÛT·bla(f·jl As String, lekÈrdezÈs As String)
                     .Columns(oszlop).ColumnWidth = 36
                 Case 5
                     .Columns(oszlop).ColumnWidth = 45
-                    .Cells(1, oszlop).Value = "Az 1. sz·m˙ t·bl·zat alapj·n a korm·nytisztviselı tÈnylegesen ell·tandÛ fealdatai*"
+                    .Cells(1, oszlop).Value = "Az 1. sz√°m√∫ t√°bl√°zat alapj√°n a korm√°nytisztvisel≈ë t√©nylegesen ell√°tand√≥ fealdatai*"
                 Case 6
                     .Columns(oszlop).ColumnWidth = 45
-                    .Cells(1, oszlop).Value = "Az 1. sz. t·bl·zatban meghat·rozott teljesÌtmÈny-kˆvetelmÈny korm·nytisztviselıre vonatkozÛ szˆvegszer˚ ÈrtÈkelÈse"
+                    .Cells(1, oszlop).Value = "Az 1. sz. t√°bl√°zatban meghat√°rozott teljes√≠tm√©ny-k√∂vetelm√©ny korm√°nytisztvisel≈ëre vonatkoz√≥ sz√∂vegszer≈± √©rt√©kel√©se"
                 Case 7
-                    .Columns(oszlop).ColumnWidth = 13 'TeljesÌtmÈny-kˆvetelmÈny
-                    .Cells(1, oszlop).Value = "TeljesÌtmÈny-kˆvetelmÈny (felett / szinten / alatt)"
+                    .Columns(oszlop).ColumnWidth = 13 'Teljes√≠tm√©ny-k√∂vetelm√©ny
+                    .Cells(1, oszlop).Value = "Teljes√≠tm√©ny-k√∂vetelm√©ny (felett / szinten / alatt)"
             End Select
         End With
         oszlop = oszlop + 1
-    Next mezı
+    Next mez≈ë
     oWs1.Range("G2:G1000").Validation.Add xlValidateList, xlValidAlertStop, xlEqual, "szint felett; szinten; szint alatt"
     oWs2.Name = "Adatok"
-    oWs2.Range("A1").Value = "KÈsz¸lt:": oWs2.Range("B1").Value = Now()
+    oWs2.Range("A1").Value = "K√©sz√ºlt:": oWs2.Range("B1").Value = Now()
     oWs2.Range("A2").Value = "Adatsor:": oWs2.Range("B2").Value = sor - 1
     
-    'TakarÌt·s
-    oWb.SaveAs fileName:=f·jl, FileFormat:=xlOpenXMLWorkbook, AddToMru:=True, Local:=True
+    'Takar√≠t√°s
+    oWb.SaveAs fileName:=f√°jl, FileFormat:=xlOpenXMLWorkbook, AddToMru:=True, Local:=True
     oWb.Close
-    'Debug.Print f·jl & " kÈsz (" & sor & " sor) ."
+    'Debug.Print f√°jl & " k√©sz (" & sor & " sor) ."
     Set oWb = Nothing
 '   Kill oWb
     
 End Sub
-Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
-'****** (c) Ol·h Zolt·n 2022 - MIT Licence ****************
+Sub Kimutat√°s(f√°jl As String, lek√©rdez√©s As String)
+'****** (c) Ol√°h Zolt√°n 2022 - MIT Licence ****************
  
- 'Az adatb·zishoz
+ 'Az adatb√°zishoz
     Dim db          As Database
     Dim qdf         As QueryDef
     Dim rs          As DAO.Recordset
-    Dim €rlapnÈv    As String
+    Dim ≈∞rlapn√©v    As String
     
     'Excelhez
     Dim sor, oszlop     As Long
@@ -827,8 +827,8 @@ Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
     
     Dim maxoszlop, maxsor As Long
     Dim adat As Variant
-    Dim mezı As Field
-    'Az elırehalad·s-jelzıhˆz
+    Dim mez≈ë As Field
+    'Az el≈ërehalad√°s-jelz≈ëh√∂z
 
     
     'Alapadatok **********************************
@@ -837,25 +837,25 @@ Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
 
     Set db = CurrentDb()
     'Set qdf = db.
-    Set rs = db.OpenRecordset(lekÈrdezÈs)
+    Set rs = db.OpenRecordset(lek√©rdez√©s)
     
     Set oApp = CreateObject("Excel.Application")
     Set oWb = oApp.Workbooks.Add
     Set oWs1 = oWb.Worksheets.Add
     Set oWs2 = oWb.Worksheets.Add(, oWs1)
     
-    oWs1.Name = "TeljesÌtmÈny-ÈrtÈkelÈs"
+    oWs1.Name = "Teljes√≠tm√©ny-√©rt√©kel√©s"
     oWs1.Activate
     
 
-    ' Tartalom kiÌr·sa
+    ' Tartalom ki√≠r√°sa
     
     With rs
         rs.MoveFirst
         rs.MoveLast
-        maxoszlop = .Fields.count  'A leendı oszlopok sz·ma, ah·ny mezı van a lekÈrdezÈsben Ès mÈg egy a sorsz·m miatt
+        maxoszlop = .Fields.count  'A leend≈ë oszlopok sz√°ma, ah√°ny mez≈ë van a lek√©rdez√©sben √©s m√©g egy a sorsz√°m miatt
         maxsor = .RecordCount
-        'Az elırehalad·s-jelzı elıkÈszÌtÈse
+        'Az el≈ërehalad√°s-jelz≈ë el≈ëk√©sz√≠t√©se
 
         .MoveFirst
         For sor = 1 To maxsor
@@ -865,7 +865,7 @@ Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
                 Else
                     adat = .Fields(oszlop - 2).Value
                     With oWs1
-                        .Cells(sor + 1, oszlop).Value = adat  'A sorsz·m oszlop miatt adunk hozz· egyet, Ìgy egyel odÈbb tessz¸k
+                        .Cells(sor + 1, oszlop).Value = adat  'A sorsz√°m oszlop miatt adunk hozz√° egyet, √≠gy egyel od√©bb tessz√ºk
                     End With
                 End If
             Next oszlop
@@ -873,14 +873,14 @@ Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
         Next sor
     End With
     With oWs1
-        .Range(.Cells(1, 1), .Cells(maxsor + 1, maxoszlop)).Name = "TeljesÌtmÈny_ÈrtÈkelÈs"
-        .Range(.Cells(maxsor + 2, 1), .Cells(maxsor + 2, 1)).Value = "*Minden feladatot k¸lˆn sorban kell felt¸ntetni!"
+        .Range(.Cells(1, 1), .Cells(maxsor + 1, maxoszlop)).Name = "Teljes√≠tm√©ny_√©rt√©kel√©s"
+        .Range(.Cells(maxsor + 2, 1), .Cells(maxsor + 2, 1)).Value = "*Minden feladatot k√ºl√∂n sorban kell felt√ºntetni!"
     End With
   
-    'A fejlÈc utÛlag jˆn a tetejÈre
+    'A fejl√©c ut√≥lag j√∂n a tetej√©re
     oszlop = 2
     With oWs1.Cells(1, 1)
-                .Value = "Sorsz·m"
+                .Value = "Sorsz√°m"
                 .Font.Bold = True
                 .Font.Name = "Calibri"
                 .Font.Size = 11
@@ -891,10 +891,10 @@ Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
                 .HorizontalAlignment = xlHAlignCenter
     End With
     oWs1.Columns(oszlop).ColumnWidth = 10
-    For Each mezı In rs.Fields
+    For Each mez≈ë In rs.Fields
         With oWs1
             With .Cells(1, oszlop)
-                .Value = Replace(mezı.Name, "_", ".")
+                .Value = Replace(mez≈ë.Name, "_", ".")
                 .Font.Bold = True
                 .Font.Name = "Calibri"
                 .Font.Size = 11
@@ -911,53 +911,53 @@ Sub Kimutat·s(f·jl As String, lekÈrdezÈs As String)
                     .Columns(oszlop).ColumnWidth = 36
                 Case 5
                     .Columns(oszlop).ColumnWidth = 45
-                    .Cells(1, oszlop).Value = "Az 1. sz·m˙ t·bl·zat alapj·n a korm·nytisztviselı tÈnylegesen ell·tandÛ fealdatai*"
+                    .Cells(1, oszlop).Value = "Az 1. sz√°m√∫ t√°bl√°zat alapj√°n a korm√°nytisztvisel≈ë t√©nylegesen ell√°tand√≥ fealdatai*"
                 Case 6
                     .Columns(oszlop).ColumnWidth = 45
-                    .Cells(1, oszlop).Value = "Az 1. sz. t·bl·zatban meghat·rozott teljesÌtmÈny-kˆvetelmÈny korm·nytisztviselıre vonatkozÛ szˆvegszer˚ ÈrtÈkelÈse"
+                    .Cells(1, oszlop).Value = "Az 1. sz. t√°bl√°zatban meghat√°rozott teljes√≠tm√©ny-k√∂vetelm√©ny korm√°nytisztvisel≈ëre vonatkoz√≥ sz√∂vegszer≈± √©rt√©kel√©se"
                 Case 7
-                    .Columns(oszlop).ColumnWidth = 13 'TeljesÌtmÈny-kˆvetelmÈny
-                    .Cells(1, oszlop).Value = "TeljesÌtmÈny-kˆvetelmÈny (felett / szinten / alatt)"
+                    .Columns(oszlop).ColumnWidth = 13 'Teljes√≠tm√©ny-k√∂vetelm√©ny
+                    .Cells(1, oszlop).Value = "Teljes√≠tm√©ny-k√∂vetelm√©ny (felett / szinten / alatt)"
             End Select
         End With
         oszlop = oszlop + 1
-    Next mezı
+    Next mez≈ë
     oWs1.Range("G2:G1000").Validation.Add xlValidateList, xlValidAlertStop, xlEqual, "szint felett; szinten; szint alatt"
     oWs2.Name = "Adatok"
-    oWs2.Range("A1").Value = "KÈsz¸lt:": oWs2.Range("B1").Value = Now()
+    oWs2.Range("A1").Value = "K√©sz√ºlt:": oWs2.Range("B1").Value = Now()
     oWs2.Range("A2").Value = "Adatsor:": oWs2.Range("B2").Value = sor - 1
     
-    'TakarÌt·s
-    oWb.SaveAs fileName:=f·jl, FileFormat:=xlOpenXMLWorkbook, AddToMru:=True, Local:=True
+    'Takar√≠t√°s
+    oWb.SaveAs fileName:=f√°jl, FileFormat:=xlOpenXMLWorkbook, AddToMru:=True, Local:=True
     oWb.Close
-    'Debug.Print f·jl & " kÈsz (" & sor & " sor) ."
+    'Debug.Print f√°jl & " k√©sz (" & sor & " sor) ."
     Set oWb = Nothing
 '   Kill oWb
     
 End Sub
 
 
-Function ⁄jOszlop(strOszlopNÈv As String) As Integer
-    Dim szˆveg As String
-    Dim v·lasz As Variant
-    Dim sz·m As Integer
+Function √öjOszlop(strOszlopN√©v As String) As Integer
+    Dim sz√∂veg As String
+    Dim v√°lasz As Variant
+    Dim sz√°m As Integer
 On Error GoTo Hiba
 Kezdet:
-    szˆveg = strOszlopNÈv & Chr(10) & "2 - Byte" & Chr(10) & "3 - Integer" & Chr(10) & "4 - Long" & Chr(10) & "5 - Currency" & Chr(10) & "6 - Single" & Chr(10) & "7 - Double" & Chr(10) & "8 - Date/Time" & Chr(10) & "10 - Text" & Chr(10) & "12 - Memo" & Chr(10) & "16 - Big Integer" & Chr(10) & "17 - VarBinary" & Chr(10) & "18 - Char" & Chr(10) & "19 - Numeric" & Chr(10) & "20 - Decimal" & Chr(10) & "21 - Float" & Chr(10) & "22 - Time" & Chr(10) & "23 - Time Stamp"
-    v·lasz = InputBox(szˆveg, "⁄j oszlop", 10) 'Ha nem v·laszol, akkor 10 lesz az ÈrtÈk.
-    If StrPtr(v·lasz) = 0 Then 'MÈgsem gombot nyomott
+    sz√∂veg = strOszlopN√©v & Chr(10) & "2 - Byte" & Chr(10) & "3 - Integer" & Chr(10) & "4 - Long" & Chr(10) & "5 - Currency" & Chr(10) & "6 - Single" & Chr(10) & "7 - Double" & Chr(10) & "8 - Date/Time" & Chr(10) & "10 - Text" & Chr(10) & "12 - Memo" & Chr(10) & "16 - Big Integer" & Chr(10) & "17 - VarBinary" & Chr(10) & "18 - Char" & Chr(10) & "19 - Numeric" & Chr(10) & "20 - Decimal" & Chr(10) & "21 - Float" & Chr(10) & "22 - Time" & Chr(10) & "23 - Time Stamp"
+    v√°lasz = InputBox(sz√∂veg, "√öj oszlop", 10) 'Ha nem v√°laszol, akkor 10 lesz az √©rt√©k.
+    If StrPtr(v√°lasz) = 0 Then 'M√©gsem gombot nyomott
         Exit Function
     End If
-    If Len(v·lasz) = 0 Then
+    If Len(v√°lasz) = 0 Then
         GoTo Kezdet
     End If
-VÈg:
-    sz·m = CInt(v·lasz)
-    MsgBox ("EredmÈny:" & sz·m)
+V√©g:
+    sz√°m = CInt(v√°lasz)
+    MsgBox ("Eredm√©ny:" & sz√°m)
 Exit Function
 Hiba:
 If Err.Number = 13 Then
-    Select Case MsgBox(Err.Number & " sz·m˙ hiba." & Chr(10) & " Csak sz·m adhatÛ meg!", vbRetryCancel)
+    Select Case MsgBox(Err.Number & " sz√°m√∫ hiba." & Chr(10) & " Csak sz√°m adhat√≥ meg!", vbRetryCancel)
         Case 2
             Exit Function
         Case 4
@@ -971,196 +971,196 @@ End If
 End Function
 
 
-Sub T·blaMezık()
+Sub T√°blaMez≈ëk()
     Dim db As Database
     Dim rs As Recordset
     Dim rs2 As Recordset
     Dim tbla As Recordset
     Dim sql, sql2, sql3 As String
-    Dim mezısz·m As Long
-    Dim mezınÈv As String
-    'Dim mezınevek() As Variant
+    Dim mez≈ësz√°m As Long
+    Dim mez≈ën√©v As String
+    'Dim mez≈ënevek() As Variant
     
-    Dim t·blanÈv As String
+    Dim t√°blan√©v As String
     
     
     sql = "SELECT Name FROM MSysObjects WHERE (Flags=0 AND Type = 1 AND Name not like '~*') OR (Type = 6 AND Name not like '~*')"
     
     Set db = CurrentDb()
-    db.Execute ("Delete * from tT·blamezık")
-    Set tbla = db.OpenRecordset("select * from tT·blamezık")
+    db.Execute ("Delete * from tT√°blamez≈ëk")
+    Set tbla = db.OpenRecordset("select * from tT√°blamez≈ëk")
         
     Set rs = db.OpenRecordset(sql)
         rs.MoveLast
         rs.MoveFirst
     
     Do Until rs.EOF
-        t·blanÈv = rs.Fields("Name")
-        sql2 = "SELECT TOP 1 * FROM [" & t·blanÈv & "];"
+        t√°blan√©v = rs.Fields("Name")
+        sql2 = "SELECT TOP 1 * FROM [" & t√°blan√©v & "];"
         Set rs2 = db.OpenRecordset(sql2)
-        'Debug.Print t·blanÈv, rs2.Fields.Count
-        For mezısz·m = 0 To rs2.Fields.count - 1
+        'Debug.Print t√°blan√©v, rs2.Fields.Count
+        For mez≈ësz√°m = 0 To rs2.Fields.count - 1
             tbla.AddNew
-            tbla.Fields("t·blanÈv") = t·blanÈv
-            mezınÈv = rs2.Fields(mezısz·m).Name
-            tbla.Fields("mezınÈv") = mezınÈv
-            tbla.Fields("sorsz·m") = mezısz·m
-            tbla.Fields("tÌpusa") = rs2.Fields(mezısz·m).Type
-            If InStr(1, mezınÈv, "d·tum") Then
+            tbla.Fields("t√°blan√©v") = t√°blan√©v
+            mez≈ën√©v = rs2.Fields(mez≈ësz√°m).Name
+            tbla.Fields("mez≈ën√©v") = mez≈ën√©v
+            tbla.Fields("sorsz√°m") = mez≈ësz√°m
+            tbla.Fields("t√≠pusa") = rs2.Fields(mez≈ësz√°m).Type
+            If InStr(1, mez≈ën√©v, "d√°tum") Then
                 'tbla.Fields = Date
             End If
             tbla.Update
-            'Debug.Print mezısz·m, rs2.Fields(mezısz·m).Name
-        Next mezısz·m
+            'Debug.Print mez≈ësz√°m, rs2.Fields(mez≈ësz√°m).Name
+        Next mez≈ësz√°m
         Set rs2 = Nothing
         rs.MoveNext
     Loop
     
 End Sub
-Public Sub HaviT·blaPlus( _
-        ByVal f·jl As String, _
+Public Sub HaviT√°blaPlus( _
+        ByVal f√°jl As String, _
         Optional ByVal lnCsoport As Long = 1)
-Debug.Print fvHaviimpT·bl·kImportPlus(f·jl, lnCsoport)
+Debug.Print fvHaviimpT√°bl√°kImportPlus(f√°jl, lnCsoport)
 End Sub
 Public Function _
-    fvHaviimpT·bl·kImportPlus( _
-        ByVal f·jl As String, _
+    fvHaviimpT√°bl√°kImportPlus( _
+        ByVal f√°jl As String, _
         Optional ByVal lnCsoport As Long = 1) _
     As Boolean
 
-fvbe ("fvHaviimpT·bl·kImportPlus")
-    'Licencia: MIT Ol·h Zolt·n 2022 (c)
+fvbe ("fvHaviimpT√°bl√°kImportPlus")
+    'Licencia: MIT Ol√°h Zolt√°n 2022 (c)
     '_____________________________________________________________________________________________________________________________
-    '------------------------------------------ V·ltozÛk deklar·ciÛja -----------------------------------------------------------¨
-    'Az Excel megnyit·s·hoz
+    '------------------------------------------ V√°ltoz√≥k deklar√°ci√≥ja -----------------------------------------------------------¬¨
+    'Az Excel megnyit√°s√°hoz
     '___________________________________|__________________________|______________________________|______________________________|
     '   Objects                         | Strings                  | Numbers                      | Variants                     |
     '___________________________________|__________________________|______________________________|______________________________|
-    Dim objExcel   As Excel.Application, xlUtolsÛOszlop   As String, intVÈgcella       As Integer, …rtÈkek()        As Variant, _
-        objBook       As Excel.Workbook, xlHosszmÈrı      As String, intMezı           As Integer, _
-        objSheet     As Excel.Worksheet, accT·bl·k        As String, intUtolsÛSor      As Integer, _
-        objRange         As Excel.Range, xlT·bl·kEred     As String, _
-        xlVÈgcella       As Excel.Range, _
-        xlKezdıCella     As Excel.Range
-    'Az adatb·zis megnyit·s·hoz
+    Dim objExcel   As Excel.Application, xlUtols√≥Oszlop   As String, intV√©gcella       As Integer, √ârt√©kek()        As Variant, _
+        objBook       As Excel.Workbook, xlHosszm√©r≈ë      As String, intMez≈ë           As Integer, _
+        objSheet     As Excel.Worksheet, accT√°bl√°k        As String, intUtols√≥Sor      As Integer, _
+        objRange         As Excel.Range, xlT√°bl√°kEred     As String, _
+        xlV√©gcella       As Excel.Range, _
+        xlKezd≈ëCella     As Excel.Range
+    'Az adatb√°zis megnyit√°s√°hoz
     '___________________________________|__________________________|______________________________|______________________________|
     '   Objects                         | Strings                  | Numbers                      | Variants                     |
     '___________________________________|__________________________|______________________________|______________________________|
-    Dim objAccess  As Access.Application, impT·bl·k       As String, oszlop       As Integer, _
-        db              As DAO.Database, strH·ttÈrDb      As String, sor          As Integer, _
+    Dim objAccess  As Access.Application, impT√°bl√°k       As String, oszlop       As Integer, _
+        db              As DAO.Database, strH√°tt√©rDb      As String, sor          As Integer, _
         rs              As DAO.Recordset, _
-        rsCÈl           As DAO.Recordset, _
-        rsHat·ly        As DAO.Recordset     'Sz·ml·l·shoz
-                                                                Dim hat·lyaID As Long
-    'A szˆveges kimenethez
+        rsC√©l           As DAO.Recordset, _
+        rsHat√°ly        As DAO.Recordset     'Sz√°ml√°l√°shoz
+                                                                Dim hat√°lyaID As Long
+    'A sz√∂veges kimenethez
     '___________________________________|__________________________|______________________________|______________________________|
     '   Objects                         | Strings                  | Numbers                      | Variants                     |
     '___________________________________|__________________________|______________________________|______________________________|
-                                     Dim ‹zenet          As String
+                                     Dim √ºzenet          As String
     '___________________________________|__________________________|______________________________|______________________________|
     
     
-    strH·ttÈrDb = "L:\Ugyintezok\Adatszolg·ltatÛk\Adatb·zisok\H·ttÈrt·rak\EllenırzÈsHavi_h·ttÈrt·r.accdb"
+    strH√°tt√©rDb = "L:\Ugyintezok\Adatszolg√°ltat√≥k\Adatb√°zisok\H√°tt√©rt√°rak\Ellen≈ërz√©sHavi_h√°tt√©rt√°r.accdb"
 '   Set objAccess = New Access.Application
-    Set db = CurrentDb 'objAccess.DBEngine.OpenDatabase(strH·ttÈrDb, False, False)
-    impT·bl·k = "tImport·landÛT·bl·k1"
+    Set db = CurrentDb 'objAccess.DBEngine.OpenDatabase(strH√°tt√©rDb, False, False)
+    impT√°bl√°k = "tImport√°land√≥T√°bl√°k1"
     
-    intVÈgcella = 0
+    intV√©gcella = 0
     'On Error GoTo hiba
 
     Set objExcel = CreateObject("Excel.Application")
     
-    Set objBook = objExcel.Workbooks.Open(f·jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
-    Set rs = db.OpenRecordset(impT·bl·k)
+    Set objBook = objExcel.Workbooks.Open(f√°jl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
+    Set rs = db.OpenRecordset(impT√°bl√°k)
     
     rs.MoveLast
     rs.MoveFirst
     
-    If DCount("*", "tHaviJelentÈsHat·lya1", "f·jlnÈv = '" & f·jl & "'") > 0 Then
-        Set rsHat·ly = db.OpenRecordset("SELECT hat·lyaID FROM tHaviJelentÈsHat·lya1 WHERE f·jlnÈv = '" & f·jl & "'")
-        If Not rsHat·ly.EOF Then
-            hat·lyaID = rsHat·ly("hat·lyaID")
+    If DCount("*", "tHaviJelent√©sHat√°lya1", "f√°jln√©v = '" & f√°jl & "'") > 0 Then
+        Set rsHat√°ly = db.OpenRecordset("SELECT hat√°lyaID FROM tHaviJelent√©sHat√°lya1 WHERE f√°jln√©v = '" & f√°jl & "'")
+        If Not rsHat√°ly.EOF Then
+            hat√°lyaID = rsHat√°ly("hat√°lyaID")
         End If
-        rsHat·ly.Close
+        rsHat√°ly.Close
     Else
-        Set rsHat·ly = db.OpenRecordset("tHaviJelentÈsHat·lya1", dbOpenDynaset)
-        rsHat·ly.AddNew
-        rsHat·ly("hat·lya") = objBook.Worksheets("Fedlap").Range("a2").Value
-        rsHat·ly("f·jlnÈv") = f·jl
-        rsHat·ly.Update
-        rsHat·ly.Bookmark = rsHat·ly.LastModified
-        hat·lyaID = rsHat·ly("hat·lyaID")
-        rsHat·ly.Close
+        Set rsHat√°ly = db.OpenRecordset("tHaviJelent√©sHat√°lya1", dbOpenDynaset)
+        rsHat√°ly.AddNew
+        rsHat√°ly("hat√°lya") = objBook.Worksheets("Fedlap").Range("a2").Value
+        rsHat√°ly("f√°jln√©v") = f√°jl
+        rsHat√°ly.Update
+        rsHat√°ly.Bookmark = rsHat√°ly.LastModified
+        hat√°lyaID = rsHat√°ly("hat√°lyaID")
+        rsHat√°ly.Close
     End If
     
     Do Until rs.EOF
-        Erase …rtÈkek
+        Erase √ârt√©kek
         If rs("Csoport") = lnCsoport Then
-            accT·bl·k = rs("AccessNÈv")
-            xlT·bl·kEred = rs("EredetiNÈv")
+            accT√°bl√°k = rs("AccessN√©v")
+            xlT√°bl√°kEred = rs("EredetiN√©v")
             
-            Set objSheet = objBook.Worksheets(xlT·bl·kEred)
+            Set objSheet = objBook.Worksheets(xlT√°bl√°kEred)
             With objSheet
                 If .AutoFilterMode Then _
-                    .AutoFilter.ShowAllData 'Kikapcsolja a sz˚rÈst az adott lapon???
+                    .AutoFilter.ShowAllData 'Kikapcsolja a sz≈±r√©st az adott lapon???
                 .Select
-                logba sFN & " " & xlT·bl·kEred, "Adatok beolvas·s indul..."
-                If Nz(rs("VÈgcella"), "") = "" Then
-                    xlHosszmÈrı = rs("HosszmÈrıCella")
-                    xlUtolsÛOszlop = rs("UtolsÛOszlop")
-                    intVÈgcella = .Range(xlHosszmÈrı & 1).Column
-                    intUtolsÛSor = .Cells(objSheet.Cells.Rows.count, intVÈgcella).End(xlUp).row
-                    Set xlVÈgcella = .Range(xlUtolsÛOszlop & intUtolsÛSor)
-                                    logba , "hosszcella: " & xlHosszmÈrı & ", utolsÛ oszl.: " & xlUtolsÛOszlop & ", VÈgcella: " & xlVÈgcella, 3
+                logba sFN & " " & xlT√°bl√°kEred, "Adatok beolvas√°s indul..."
+                If Nz(rs("V√©gcella"), "") = "" Then
+                    xlHosszm√©r≈ë = rs("Hosszm√©r≈ëCella")
+                    xlUtols√≥Oszlop = rs("Utols√≥Oszlop")
+                    intV√©gcella = .Range(xlHosszm√©r≈ë & 1).Column
+                    intUtols√≥Sor = .Cells(objSheet.Cells.Rows.count, intV√©gcella).End(xlUp).row
+                    Set xlV√©gcella = .Range(xlUtols√≥Oszlop & intUtols√≥Sor)
+                                    logba , "hosszcella: " & xlHosszm√©r≈ë & ", utols√≥ oszl.: " & xlUtols√≥Oszlop & ", V√©gcella: " & xlV√©gcella, 3
                 Else
-                    Set xlVÈgcella = .Range(rs("VÈgcella"))
+                    Set xlV√©gcella = .Range(rs("V√©gcella"))
                 End If
-                    Set xlKezdıCella = .Range(rs("KezdıCella"))
+                    Set xlKezd≈ëCella = .Range(rs("Kezd≈ëCella"))
                     
-                    If xlKezdıCella.row < xlVÈgcella.row Then 'Ha van adat a t·bl·ban ...
-                        .Range(xlKezdıCella, xlVÈgcella).Name = accT·bl·k
+                    If xlKezd≈ëCella.row < xlV√©gcella.row Then 'Ha van adat a t√°bl√°ban ...
+                        .Range(xlKezd≈ëCella, xlV√©gcella).Name = accT√°bl√°k
                     
-                                    logba , accT·bl·k & ":;" & .Range(accT·bl·k).Rows.count, 2
+                                    logba , accT√°bl√°k & ":;" & .Range(accT√°bl√°k).Rows.count, 2
                 
                 
-                        Set rsCÈl = db.OpenRecordset(accT·bl·k, dbOpenDynaset)
-                        …rtÈkek = .Range(accT·bl·k).Value
-                                    logba sFN & " " & xlT·bl·kEred, " ter¸letrıl az adatokat beolvastuk."
-                                    logba sFN & " " & xlT·bl·kEred, "Adatok kiÌr·sa indul. CÈl:" & accT·bl·k
+                        Set rsC√©l = db.OpenRecordset(accT√°bl√°k, dbOpenDynaset)
+                        √ârt√©kek = .Range(accT√°bl√°k).Value
+                                    logba sFN & " " & xlT√°bl√°kEred, " ter√ºletr≈ël az adatokat beolvastuk."
+                                    logba sFN & " " & xlT√°bl√°kEred, "Adatok ki√≠r√°sa indul. C√©l:" & accT√°bl√°k
             
-                        For sor = LBound(…rtÈkek, 1) To UBound(…rtÈkek, 1)
-                            intMezı = 0
-                            '˙j rekord hozz·ad·sa kezdıdik...
-                            rsCÈl.AddNew
-                            For oszlop = LBound(…rtÈkek, 2) To UBound(…rtÈkek, 2)
-                                If rsCÈl.Fields.count < oszlop Then
+                        For sor = LBound(√ârt√©kek, 1) To UBound(√ârt√©kek, 1)
+                            intMez≈ë = 0
+                            '√∫j rekord hozz√°ad√°sa kezd≈ëdik...
+                            rsC√©l.AddNew
+                            For oszlop = LBound(√ârt√©kek, 2) To UBound(√ârt√©kek, 2)
+                                If rsC√©l.Fields.count < oszlop Then
                                     Exit For
                                 End If
-                                intMezı = oszlop - 1
-                                rsCÈl.Fields(intMezı) = konverter(rsCÈl.Fields(intMezı), …rtÈkek(sor, oszlop))
+                                intMez≈ë = oszlop - 1
+                                rsC√©l.Fields(intMez≈ë) = konverter(rsC√©l.Fields(intMez≈ë), √ârt√©kek(sor, oszlop))
                             Next oszlop
-                            rsCÈl("hat·lyaID") = hat·lyaID  ' Add the hat·lyaID to the new record
-                            rsCÈl.Update
-                            '˙j rekord hozz·ad·sa vÈget Èrt
+                            rsC√©l("hat√°lyaID") = hat√°lyaID  ' Add the hat√°lyaID to the new record
+                            rsC√©l.Update
+                            '√∫j rekord hozz√°ad√°sa v√©get √©rt
                         Next sor
-                                    logba sFN & " " & xlT·bl·kEred, "Adatok kiÌr·sa " & nÈvelıvel(accT·bl·k) & "t·bl·ba vÈget Èrt."
-                    Else 'Ha nincs adat a t·bl·ban ...
+                                    logba sFN & " " & xlT√°bl√°kEred, "Adatok ki√≠r√°sa " & n√©vel≈ëvel(accT√°bl√°k) & "t√°bl√°ba v√©get √©rt."
+                    Else 'Ha nincs adat a t√°bl√°ban ...
                         'nincs mit elnevezni,
-                        'nincs mit kiÌrni,
-                        'amibıl az kˆvetkezik, hogy ha nincs egy t·bl·ban egy hat·lynapra ID, akkor arra a napra nem volt adat...
+                        'nincs mit ki√≠rni,
+                        'amib≈ël az k√∂vetkezik, hogy ha nincs egy t√°bl√°ban egy hat√°lynapra ID, akkor arra a napra nem volt adat...
                     End If
             End With
         End If
         
         rs.MoveNext
-        intVÈgcella = 0
+        intV√©gcella = 0
     Loop
     
-                                    logba sFN & " " & xlT·bl·kEred, objBook.Name & " bez·r·sa mentÈs nÈlk¸l..."
+                                    logba sFN & " " & xlT√°bl√°kEred, objBook.Name & " bez√°r√°sa ment√©s n√©lk√ºl..."
     objBook.Close SaveChanges:=False
     
-    fvHaviimpT·bl·kImportPlus = True
-    Debug.Print f·jl
+    fvHaviimpT√°bl√°kImportPlus = True
+    Debug.Print f√°jl
 ki:
     Set objBook = Nothing
     Set objExcel = Nothing
@@ -1168,7 +1168,7 @@ fvki
     Exit Function
 Hiba:
     MsgBox Hiba(Err)
-    fvHaviimpT·bl·kImportPlus = False
+    fvHaviimpT√°bl√°kImportPlus = False
     If intLoglevel >= 2 Then
         Resume Next
     Else
