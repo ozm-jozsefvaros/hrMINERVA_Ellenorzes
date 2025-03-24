@@ -38,3 +38,19 @@ Public Sub Flush()
         stream.Position = stream.Size  ' Move to end to avoid overwriting
     End If
 End Sub
+Public Sub SetEncoding(ByVal encoding As String)
+    If Not stream Is Nothing Then
+        stream.Close ' Close the stream before changing the encoding
+    End If
+    stream.Charset = encoding ' Set the new encoding
+    stream.Open ' Reopen the stream with the new encoding
+End Sub
+
+' Get the current encoding
+Public Function GetEncoding() As String
+    If Not stream Is Nothing Then
+        GetEncoding = stream.Charset ' Return the current encoding
+    Else
+        GetEncoding = "Stream not initialized"
+    End If
+End Function
