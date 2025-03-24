@@ -13,7 +13,7 @@ fvbe ("ExportQueriesAndProceduresToFiles")
     Dim mentett As ImportExportSpecification
 
     Dim objektumnév As String
-    Dim Üzenet As String
+    Dim üzenet As String
     Dim sorokSzáma As Long
     Const táblaszerkezettel As Boolean = True
     
@@ -33,29 +33,29 @@ fvbe ("ExportQueriesAndProceduresToFiles")
 
 ' lekérdezések kiíratása
         If lekérdezésekkiíratása(strExportPath, db) Then
-            Üzenet = névelõvel(db.QueryDefs.count, False, True) & "db. lekérdezés kiíratása sikerült."
+            üzenet = névelõvel(db.QueryDefs.count, False, True) & "db. lekérdezés kiíratása sikerült."
             logba , névelõvel(db.QueryDefs.count, False, True) & "db. lekérdezés kiíratása sikerült.", 1
         Else
-            Üzenet = "A lekérdezések kiíratása nem sikerült."
+            üzenet = "A lekérdezések kiíratása nem sikerült."
             logba , "A lekérdezések kiíratása nem sikerült", 1
         End If
     
 ' modulok kiíratása Application.Modules gyûjteménybõl
         sorokSzáma = modulokkiíratása(strExportPath, db)
         If sorokSzáma Then
-            Üzenet = Üzenet & vbNewLine & névelõvel(Application.Modules.count) & "db. modul kiíratása sikerült. A sorok száma összesen:" & sorokSzáma
+            üzenet = üzenet & vbNewLine & névelõvel(Application.Modules.count) & "db. modul kiíratása sikerült. A sorok száma összesen:" & sorokSzáma
             logba , névelõvel(Application.Modules.count) & "db. modul kiíratása sikerült. A sorok száma összesen:" & sorokSzáma, 1
         Else
-            Üzenet = Üzenet & vbNewLine & "A modulok kiíratása nem sikerült."
+            üzenet = üzenet & vbNewLine & "A modulok kiíratása nem sikerült."
             logba , "A modulok kiíratása nem sikerült", 1
         End If
     
 'Mentett ExportImport-ok kiíratása
         If mentettexportimportXMLekkiíratása(strExportPath, db) Then
-            Üzenet = Üzenet & vbNewLine & "A Mentett ExportImport-ok kiíratása sikerült."
+            üzenet = üzenet & vbNewLine & "A Mentett ExportImport-ok kiíratása sikerült."
             logba , "A Mentett ExportImport-ok kiíratása sikerült", 1
         Else
-            Üzenet = Üzenet & vbNewLine & "A Mentett ExportImport-ok kiíratása nem sikerült."
+            üzenet = üzenet & vbNewLine & "A Mentett ExportImport-ok kiíratása nem sikerült."
             logba , "A Mentett ExportImport-ok kiíratása nem sikerült", 1
         End If
 
@@ -67,7 +67,7 @@ fvbe ("ExportQueriesAndProceduresToFiles")
             konyvtarzo strExportPath & mappa 'dif
             GenerateSQLBackup strfilename, db
         End If
-    If MsgBox(Üzenet & vbNewLine & "Az elkészített állomány ebbe a mappába kerültek:" & vbNewLine & _
+    If MsgBox(üzenet & vbNewLine & "Az elkészített állomány ebbe a mappába kerültek:" & vbNewLine & _
             strExportPath & vbNewLine & _
             "Megnyissam a könyvtárat?", vbYesNo) _
         Then
