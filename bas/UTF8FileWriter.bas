@@ -39,18 +39,46 @@ Public Sub Flush()
     End If
 End Sub
 Public Sub SetEncoding(ByVal encoding As String)
+    On Error GoTo EncodingError ' Enable error handling
+
+    Dim pos As Long
     If Not stream Is Nothing Then
-        stream.Close ' Close the stream before changing the encoding
+        ' Save the current position if the stream is open
+        If stream.Position > 0 Then
+            pos = stream.Position
+            stream.Position = 0 ' Reset position to the beginning
+        End If
+        
+        ' Change the encoding
+        stream.Charset = encoding
+        
+        ' Restore the position if it was moved
+        If pos > 0 Then
+            stream.Position = pos
+        End If
+    Else
+        MsgBox "Stream is not initialized. Cannot set encoding.", vbExclamation, "Encoding Error"
     End If
-    stream.Charset = encoding ' Set the new encoding
-    stream.Open ' Reopen the stream with the new encoding
+    Exit Sub
+
+EncodingError:
+    MsgBox Hiba(err)
+    Err.Clear ' Clear the error
 End Sub
 
 ' Get the current encoding
 Public Function GetEncoding() As String
+    On Error GoTo EncodingError ' Enable error handling
+
     If Not stream Is Nothing Then
         GetEncoding = stream.Charset ' Return the current encoding
     Else
-        GetEncoding = "Stream not initialized"
+        GetEncoding = "Stream not initialized" ' Feedback if the stream is not initialized
     End If
+    Exit Function ' Exit cleanly if no error occurs
+
+EncodingError:
+    MsgBox Hiba(err)
+    GetEncoding = "Error retrieving encoding" ' Return a fallback value in case of an error
+    Err.Clear ' Clear the error
 End Function

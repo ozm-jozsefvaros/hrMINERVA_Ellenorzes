@@ -129,101 +129,101 @@ Hiba:
 End Function
 
 Function modulokkiíratása(strExportPath, db As Database) As Long
-Dim hibaszám As Integer
-Dim ts As Object
-Dim qdf As QueryDef
-Dim strDBnev As String, _
-    mappa As String, _
-    strFileFame As String
-Dim sorokSzáma As Long
-Dim mdl As Module
-    
-strDBnev = Replace(ffsplit(db.Name, "\", StrCount(db.Name, "\") + 1), ".accdb", "")
-sorokSzáma = 0
-On Error GoTo Hiba:
-    mappa = "bas\"
-Set fso = CreateObject("Scripting.FileSystemObject")
-    For i = 0 To Application.Modules.count - 1 ' mdl In Application.Modules
-        Set mdl = Application.Modules(i)
-        If Not mdl.Name Like "msys*" Then ' Exclude system modules
-            konyvtarzo strExportPath & mappa
-            strfilename = strExportPath & mappa & RIC(mdl.Name) & ".bas"
-            Set ts = fso.CreateTextFile(strfilename, True)
-            sorokSzáma = sorokSzáma + mdl.CountOfLines
-            ts.Write mdl.Lines(1, mdl.CountOfLines)
-            'Debug.Print mdl.ProcStartLine
-            ts.Close
-            Set ts = Nothing
+    Dim hibaszám As Integer
+    Dim ts As Object
+    Dim qdf As QueryDef
+    Dim strDBnev As String, _
+        mappa As String, _
+        strFileFame As String
+    Dim sorokSzáma As Long
+    Dim mdl As Module
+        
+    strDBnev = Replace(ffsplit(db.Name, "\", StrCount(db.Name, "\") + 1), ".accdb", "")
+    sorokSzáma = 0
+    On Error GoTo Hiba:
+        mappa = "bas\"
+    Set fso = CreateObject("Scripting.FileSystemObject")
+        For i = 0 To Application.Modules.count - 1 ' mdl In Application.Modules
+            Set mdl = Application.Modules(i)
+            If Not mdl.Name Like "msys*" Then ' Exclude system modules
+                konyvtarzo strExportPath & mappa
+                strfilename = strExportPath & mappa & RIC(mdl.Name) & ".bas"
+                Set ts = fso.CreateTextFile(strfilename, True)
+                sorokSzáma = sorokSzáma + mdl.CountOfLines
+                ts.Write mdl.Lines(1, mdl.CountOfLines)
+                'Debug.Print mdl.ProcStartLine
+                ts.Close
+                Set ts = Nothing
+            End If
+        Next i
+    modulokkiíratása = sorokSzáma
+    ki:
+    Exit Function
+    Hiba:
+        
+        Hiba Err
+        ÷ hibaszám
+        If hibaszám < 10 Then
+            Resume Next
         End If
-    Next i
-modulokkiíratása = sorokSzáma
-ki:
-Exit Function
-Hiba:
-    
-    Hiba Err
-    ÷ hibaszám
-    If hibaszám < 10 Then
-        Resume Next
-    End If
-    modulokkiíratása = 0
+        modulokkiíratása = 0
 End Function
 
 Function mentettexportimportXMLekkiíratása(strExportPath, db As Database) As Boolean
-Dim hibaszám As Integer
-Dim ts As Object
-Dim qdf As QueryDef
-Dim strDBnev As String, _
-    mappa As String, _
-    strFileFame As String
-    
-strDBnev = Replace(ffsplit(db.Name, "\", StrCount(db.Name, "\") + 1), ".accdb", "")
-mentettexportimportXMLekkiíratása = False
-On Error GoTo Hiba:
-    mappa = "XML\"
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    For i = 0 To CurrentProject.ImportExportSpecifications.count - 1
-        Set mentett = CurrentProject.ImportExportSpecifications.item(i)
-        With mentett
-            konyvtarzo strExportPath & mappa
-            strfilename = strExportPath & mappa & RIC(.Name) & ".XML"
-            Set ts = fso.CreateTextFile(strfilename, True)
-            ts.Write .XML
-            ts.Close
-            Set ts = Nothing
-        End With
-    Next i
-mentettexportimportXMLekkiíratása = True
-ki:
-Exit Function
-Hiba:
-    mentettexportimportXMLekkiíratása = False
-    Hiba Err
-    ÷ hibaszám
-    If hibaszám < 10 Then
-        Resume Next
-    End If
-    
+    Dim hibaszám As Integer
+    Dim ts As Object
+    Dim qdf As QueryDef
+    Dim strDBnev As String, _
+        mappa As String, _
+        strFileFame As String
+        
+        strDBnev = Replace(ffsplit(db.Name, "\", StrCount(db.Name, "\") + 1), ".accdb", "")
+        mentettexportimportXMLekkiíratása = False
+        On Error GoTo Hiba:
+            mappa = "XML\"
+            Set fso = CreateObject("Scripting.FileSystemObject")
+            For i = 0 To CurrentProject.ImportExportSpecifications.count - 1
+                Set mentett = CurrentProject.ImportExportSpecifications.item(i)
+                With mentett
+                    konyvtarzo strExportPath & mappa
+                    strfilename = strExportPath & mappa & RIC(.Name) & ".XML"
+                    Set ts = fso.CreateTextFile(strfilename, True)
+                    ts.Write .XML
+                    ts.Close
+                    Set ts = Nothing
+                End With
+            Next i
+        mentettexportimportXMLekkiíratása = True
+    ki:
+        Exit Function
+    Hiba:
+        mentettexportimportXMLekkiíratása = False
+        Hiba Err
+        ÷ hibaszám
+        If hibaszám < 10 Then
+            Resume Next
+        End If
+        
 End Function
 Function függõk(leknév)
-Dim db As DAO.Database
-Set db = CurrentDb
-Dim qdf As QueryDef
+    Dim db As DAO.Database
+    Set db = CurrentDb
+    Dim qdf As QueryDef
 
-    For Each qdf In db.QueryDefs
-        If Not qdf.Name Like "~*" Then ' Exclude system queries
-            If InStr(1, qdf.sql, leknév) Then
-                függõk = függõk & qdf.Name & ","
+        For Each qdf In db.QueryDefs
+            If Not qdf.Name Like "~*" Then ' Exclude system queries
+                If InStr(1, qdf.sql, leknév) Then
+                    függõk = függõk & qdf.Name & ","
+                End If
             End If
+        Next qdf
+        függõk = Left(függõk, Len(függõk) - 1)
+    End Function
+    Sub konyvtarzo(Útvonal As String)
+    'Ha a megadott könyvtár nem létezik, akkor létre hoz egyet.
+        If Dir(Útvonal, vbDirectory) = "" Then
+            MkDir Útvonal
         End If
-    Next qdf
-    függõk = Left(függõk, Len(függõk) - 1)
-End Function
-Sub konyvtarzo(Útvonal As String)
-'Ha a megadott könyvtár nem létezik, akkor létre hoz egyet.
-    If Dir(Útvonal, vbDirectory) = "" Then
-        MkDir Útvonal
-    End If
 End Sub
 
 

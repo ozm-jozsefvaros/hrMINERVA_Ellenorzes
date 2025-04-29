@@ -40,70 +40,70 @@ Sub Ellenõrzés1(ByVal Ûrlapnév As String)
 ' Ez a fv. az adathiány lekérdezéseket futtatja (azETípus=1 vagyis Hiba)
 ' és a tEll változóban tárolt nevû táblába írja az eredményt,
 ' majd a végén megnyitja az eredményt
-fvbe ("Ellenõrzés1")
-'On Error GoTo Err_Ellenõrzés
-    Dim db                  As Database
-    Dim lkEll               As Recordset    'A soron következõ ellenõrzõ lekérdezés
-    Dim ehj             As New ehjoszt      'A státusz megjelenítéséhez
-    Dim sqlA                As String
-    Dim lkEllLek, lknév     As String
-    Dim tEll                As String       'Az ellenõrzés tábla neve
-'    Dim lkEredm             As String       'Az eredmény lekérdezés neve
-    Dim ûrl                 As Form
-    Set ûrl = Application.Forms(ûrlap)
-    lkEllLek = "SELECT * FROM lkEllenõrzõLekérdezések2 WHERE azETípus = 1 AND Kimenet = False AND azUnion = 1 ;"    'Ez a lekérdezés sorolja fel azokat a lekérdezéseket, amelyeket le kell futtatnunk.
-    tEll = "t__Ellenõrzés_02"
-'    lkEredm = "lk_Ellenõrzés_03"
-sFoly ûrl, "Betöltés:; Adathiány ellenõrzés elõkészítése"
-    
-    Set db = CurrentDb()
-    db.Execute ("Delete * From " & tEll & ";") 'Kitöröljük a tábla tartalmát
-    
-    
-    Set lkEll = db.OpenRecordset(lkEllLek)
-    lkEll.MoveLast
-    lkEll.MoveFirst
-    
-sFoly ûrl, "Betöltés:; " & lkEll.RecordCount & " db. lekérdezés indul..."
-    ' A felsorolt lekérdezések lefuttatása
-    sqlA = ""
-    ehj.Ini 100
-    ehj.oszlopszam = lkEll.RecordCount
-    Do Until lkEll.EOF
-        lknév = lkEll("EllenõrzõLekérdezés")
-        sqlA = sqlA & " INSERT INTO " & tEll
-        sqlA = sqlA & "      SELECT " & lknév & ".*"
-        sqlA = sqlA & "      FROM " & lknév & ";"
-        db.Execute (sqlA)
+    fvbe ("Ellenõrzés1")
+    'On Error GoTo Err_Ellenõrzés
+        Dim db                  As Database
+        Dim lkEll               As Recordset    'A soron következõ ellenõrzõ lekérdezés
+        Dim ehj             As New ehjoszt      'A státusz megjelenítéséhez
+        Dim sqlA                As String
+        Dim lkEllLek, lknév     As String
+        Dim tEll                As String       'Az ellenõrzés tábla neve
+    '    Dim lkEredm             As String       'Az eredmény lekérdezés neve
+        Dim ûrl                 As Form
+        Set ûrl = Application.Forms(ûrlap)
+        lkEllLek = "SELECT * FROM lkEllenõrzõLekérdezések2 WHERE azETípus = 1 AND Kimenet = False AND azUnion = 1 ;"    'Ez a lekérdezés sorolja fel azokat a lekérdezéseket, amelyeket le kell futtatnunk.
+        tEll = "t__Ellenõrzés_02"
+    '    lkEredm = "lk_Ellenõrzés_03"
+    sFoly ûrl, "Betöltés:; Adathiány ellenõrzés elõkészítése"
         
-        logba sFN & " - sqlA", sqlA, 4
+        Set db = CurrentDb()
+        db.Execute ("Delete * From " & tEll & ";") 'Kitöröljük a tábla tartalmát
         
+        
+        Set lkEll = db.OpenRecordset(lkEllLek)
+        lkEll.MoveLast
+        lkEll.MoveFirst
+        
+    sFoly ûrl, "Betöltés:; " & lkEll.RecordCount & " db. lekérdezés indul..."
+        ' A felsorolt lekérdezések lefuttatása
         sqlA = ""
-        
-        
-        lkEll.MoveNext
-        ehj.Novel
-    Loop
-    'Az adóazonosító jel (szöveg) átalakítása adójel-lé (dupla szám)
-sFoly ûrl, "Betöltés:; adójel konverzió"
-    db.Execute (GetQuerySQL("lk_Ellenõrzés_02_táblába_adójelKonverzió"))
-sFoly ûrl, "Betöltés:; elõkészítés véget ért"
+        ehj.Ini 100
+        ehj.oszlopszam = lkEll.RecordCount
+        Do Until lkEll.EOF
+            lknév = lkEll("EllenõrzõLekérdezés")
+            sqlA = sqlA & " INSERT INTO " & tEll
+            sqlA = sqlA & "      SELECT " & lknév & ".*"
+            sqlA = sqlA & "      FROM " & lknév & ";"
+            db.Execute (sqlA)
+            
+            logba sFN & " - sqlA", sqlA, 4
+            
+            sqlA = ""
+            
+            
+            lkEll.MoveNext
+            ehj.Novel
+        Loop
+        'Az adóazonosító jel (szöveg) átalakítása adójel-lé (dupla szám)
+    sFoly ûrl, "Betöltés:; adójel konverzió"
+        db.Execute (GetQuerySQL("lk_Ellenõrzés_02_táblába_adójelKonverzió"))
+    sFoly ûrl, "Betöltés:; elõkészítés véget ért"
 
-Err_Kimenet:
-    Exit Sub
-    
-Err_Ellenõrzés:
-    Select Case Err.Number
-    Case 3417
-        sqlA = GetQuerySQL(lknév)
-        logba , Err.Number, 0
-        Resume 0
-    Case Else
-        MsgBox Err.Number & Err.Description
-        logba , Err.Number & Err.Description, 0
-        'Resume Next
-    End Select
-fvki
+    Err_Kimenet:
+        Exit Sub
+        
+    Err_Ellenõrzés:
+        Select Case Err.Number
+        Case 3417
+            sqlA = GetQuerySQL(lknév)
+            logba , Err.Number, 0
+            Resume 0
+        Case Else
+            MsgBox Err.Number & Err.Description
+            logba , Err.Number & Err.Description, 0
+            'Resume Next
+        End Select
+    fvki
 End Sub
 Sub Ellenõrzés2(ûrlap As Form, Optional Kimenet As Boolean = True)
 ' Ez a fv. az adathiány lekérdezéseket futtatja (azETípus = 1 vagyis Hiba)

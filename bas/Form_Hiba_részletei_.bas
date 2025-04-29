@@ -4,7 +4,7 @@ Option Compare Database
 Private Sub Form_Current()
 Dim tömb() As Variant
 Me.Hiba.RowSource = "Mező; Tartalom"
-tömb = sz�tbont�(Me.M�sodik_mez�, Me.Lek�rdez�sNeve)
+tömb = szétbontó(Me.Második_mező, Me.LekérdezésNeve)
     For i = LBound(tömb) To UBound(tömb)
         Me.Hiba.AddItem tömb(i, 1) & ":;" & tömb(i, 2)
     Next i

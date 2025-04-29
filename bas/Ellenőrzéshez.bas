@@ -105,145 +105,145 @@ Dim a As Boolean
 End Sub
 
 Public Function fvHaviTáblaImport(ByVal fájlnév As String, ByRef ûrlap As Object, Optional ByVal lnCsoport As Long = 1) As Boolean
-fvbe ("fvHaviTáblaImport")
-'Licencia: MIT Oláh Zoltán 2022 (c)
-    'Az Excel megnyitásához
-    Dim objExcel        As Excel.Application
-    Dim objBook         As Excel.Workbook
-    Dim objSheet        As Excel.Worksheet
-    Dim objRange        As Excel.Range
-    
-    Dim accTábla         As String
-    Dim xlTáblaEred     As String
-    Dim xlVégcella      As String
-    
-    Dim xlUtolsóOszlop  As String
-    Dim intVégcella     As Integer
-    Dim xlHosszmérõ     As String
-    
-    Dim Értékek()       As Variant
-    Dim intMezõ         As Integer
-    
-    'Az adatbázis megnyitásához
-    Dim db              As DAO.Database     'Ez lesz az adatbázisunk
-    Dim strHáttérDb        As String     'Ez a háttéradatbázis, ahol a táblák laknak
-    Dim rs              As DAO.Recordset    'A beolvasandó lapok és területek adatait tartalmazó táblának
-    Dim rsCél           As DAO.Recordset    'Ahová másolunk
-    Dim fájl            As String
-    
-    Dim Eredmény        As Integer
-    Dim tábla           As String           'A tábla : a táblák jellemzõit tároló tábla
-    
-    'A szöveges kimenethez
-    Dim üzenet As String
-    
-    'Számláláshoz
-    Dim sor As Integer, oszlop As Integer
-    
-    tábla = "tImportálandóTáblák"
-    strHáttérDb = "L:\Ugyintezok\Adatszolgáltatók\Adatbázisok\Háttértárak\Ellenõrzés_0.9.6_háttér_.mdb.accdb"
-    intVégcella = 0
-'On Error GoTo hiba
-    
-    Set objExcel = CreateObject("Excel.Application")
-    Set db = CurrentDb()
-    'Set háttérdb =
-    ' ha az útvonal végén nincs \, akkor hozzáfûzzük, [de ha van, akkor meg nem :)]
-    fájl = fájlnév
-    ' megnyitjuk az Excel táblát
-    Set objBook = objExcel.Workbooks.Open(fájl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
-    logba "Beolvasott állomány:", fájlnév, 2
-    Set rs = db.OpenRecordset(tábla)
-    
-        If lnCsoport = 1 Then 'Havi létszámjelentés tábla...
-            xlTáblaEred = "Fedlap"
-            Set objSheet = objBook.Worksheets(xlTáblaEred)
-            objSheet.Select ' Ráugrunk a lapra
-            Dim rHJH As DAO.Recordset
-            Dim hatályID As Long
-            
-            Set rHJH = db.OpenRecordset("tHaviJelentésHatálya", dbOpenDynaset)
-            rHJH.AddNew
-            rHJH!hatálya = objSheet.Range("a2").Value
-            rHJH!fájlnév = fájl
-            rHJH.Update
-            
-            rHJH.Bookmark = rHJH.LastModified
-            hatályID = rHJH!hatályaID
-            rHJH.Close
-            Set rHJH = Nothing
-        End If
-    Do Until rs.EOF
-        Erase Értékek
-        If rs("Csoport") = lnCsoport Then
-            
-            accTábla = rs("AccessNév")
-            xlTáblaEred = rs("EredetiNév"): 'Debug.Print xlTáblaEred & " -- " & accTábla
-            Set objSheet = objBook.Worksheets(xlTáblaEred)
-            xlVégcella = Nz(rs("Végcella"), "")
-            If xlVégcella = "" Then
-                xlHosszmérõ = rs("HosszmérõCella")
-                xlUtolsóOszlop = rs("UtolsóOszlop")
-                intVégcella = objSheet.Range(xlHosszmérõ & 1).Column
-                xlVégcella = objSheet.Cells(objSheet.Cells.Rows.count, intVégcella).End(xlUp).row
-                xlVégcella = xlUtolsóOszlop & xlVégcella
-                logba , "hosszcella: " & xlHosszmérõ & ", utolsó oszl.: " & xlUtolsóOszlop & ", Végcella: " & xlVégcella, 3
-            End If
-            
-                If DCount("[Name]", "MSysObjects", "[Name] = '" & accTábla & "'") = 1 Then
-                        CurrentDb.Execute "DELETE FROM [" & accTábla & "]", dbFailOnError
-
-                    Else
-                        CurrentDb.Execute "DELETE FROM [" & accTábla & "_tart]", dbFailOnError
-                        DoCmd.CopyObject strHáttérDb, accTábla, acTable, accTábla & "_tart"
-                    End If
-                If CsakSzám(rs("KezdõCella")) < CsakSzám(xlVégcella) Then
-                    With objSheet
-                        .Range(.Range(rs("KezdõCella")), .Range(xlVégcella)).Name = accTábla 'Elnevezzük a területet
-                        sFoly ûrlap, accTábla & ":;" & .Range(accTábla).Rows.count
-                        logba , .Range(accTábla).Rows.count, 3
-                    End With
-                    
-            
-                    'Elkezdjük az adatok betöltését
-                    Set rsCél = db.OpenRecordset(accTábla)
-            
-                    Értékek = objSheet.Range(accTábla).Value
-                    logba , "Az " & accTábla & " területrõl az adatokat beolvastuk."
-                    logba , "A céltábla:" & rsCél.Name
-            
-                    For sor = LBound(Értékek, 1) To UBound(Értékek, 1)
-                        intMezõ = 0
-                        'új rekord hozzáadása kezdõdik...
-                        rsCél.AddNew
-                        For oszlop = LBound(Értékek, 2) To UBound(Értékek, 2)
-                            If rsCél.Fields.count < oszlop Then
-                                Exit For
-                            End If
-                            intMezõ = oszlop - 1
-            
-                            rsCél.Fields(intMezõ) = konverter(rsCél.Fields(intMezõ), Értékek(sor, oszlop))
-                            
-                        Next oszlop
-                        rsCél.Fields(oszlop - 1) = hatályID
-                        rsCél.Update
-                        'új rekord hozzáadása véget ért
-                    Next sor
-                    logba , "Az " & accTábla & " nevû táblába az adatokat beírtuk:" & sor & " sor."
-                    logba , "Az " & accTábla & " beolvasása megtörtént."
-                Else
-                    logba , "Az " & accTábla & " nevû táblába nem írtunk adatokat, mert üres volt."
-                    logba , "Az " & accTábla & " beolvasása megtörtént."
-                End If
-
-        End If
-        rs.MoveNext
+    fvbe ("fvHaviTáblaImport")
+    'Licencia: MIT Oláh Zoltán 2022 (c)
+        'Az Excel megnyitásához
+        Dim objExcel        As Excel.Application
+        Dim objBook         As Excel.Workbook
+        Dim objSheet        As Excel.Worksheet
+        Dim objRange        As Excel.Range
+        
+        Dim accTábla         As String
+        Dim xlTáblaEred     As String
+        Dim xlVégcella      As String
+        
+        Dim xlUtolsóOszlop  As String
+        Dim intVégcella     As Integer
+        Dim xlHosszmérõ     As String
+        
+        Dim Értékek()       As Variant
+        Dim intMezõ         As Integer
+        
+        'Az adatbázis megnyitásához
+        Dim db              As DAO.Database     'Ez lesz az adatbázisunk
+        Dim strHáttérDb        As String     'Ez a háttéradatbázis, ahol a táblák laknak
+        Dim rs              As DAO.Recordset    'A beolvasandó lapok és területek adatait tartalmazó táblának
+        Dim rsCél           As DAO.Recordset    'Ahová másolunk
+        Dim fájl            As String
+        
+        Dim Eredmény        As Integer
+        Dim tábla           As String           'A tábla : a táblák jellemzõit tároló tábla
+        
+        'A szöveges kimenethez
+        Dim üzenet As String
+        
+        'Számláláshoz
+        Dim sor As Integer, oszlop As Integer
+        
+        tábla = "tImportálandóTáblák"
+        strHáttérDb = "L:\Ugyintezok\Adatszolgáltatók\Adatbázisok\Háttértárak\Ellenõrzés_0.9.6_háttér_.mdb.accdb"
         intVégcella = 0
-    Loop
-    logba , objBook.Name & " bezárása mentés nélkül...", 3
-    fvHaviTáblaImport = True
-    GoTo Tisztítás
-fvki
+    'On Error GoTo hiba
+        
+        Set objExcel = CreateObject("Excel.Application")
+        Set db = CurrentDb()
+        'Set háttérdb =
+        ' ha az útvonal végén nincs \, akkor hozzáfûzzük, [de ha van, akkor meg nem :)]
+        fájl = fájlnév
+        ' megnyitjuk az Excel táblát
+        Set objBook = objExcel.Workbooks.Open(fájl, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, Editable:=False, Notify:=False)
+        logba "Beolvasott állomány:", fájlnév, 2
+        Set rs = db.OpenRecordset(tábla)
+        
+            If lnCsoport = 1 Then 'Havi létszámjelentés tábla...
+                xlTáblaEred = "Fedlap"
+                Set objSheet = objBook.Worksheets(xlTáblaEred)
+                objSheet.Select ' Ráugrunk a lapra
+                Dim rHJH As DAO.Recordset
+                Dim hatályID As Long
+                
+                Set rHJH = db.OpenRecordset("tHaviJelentésHatálya", dbOpenDynaset)
+                rHJH.AddNew
+                rHJH!hatálya = objSheet.Range("a2").Value
+                rHJH!fájlnév = fájl
+                rHJH.Update
+                
+                rHJH.Bookmark = rHJH.LastModified
+                hatályID = rHJH!hatályaID
+                rHJH.Close
+                Set rHJH = Nothing
+            End If
+        Do Until rs.EOF
+            Erase Értékek
+            If rs("Csoport") = lnCsoport Then
+                
+                accTábla = rs("AccessNév")
+                xlTáblaEred = rs("EredetiNév"): 'Debug.Print xlTáblaEred & " -- " & accTábla
+                Set objSheet = objBook.Worksheets(xlTáblaEred)
+                xlVégcella = Nz(rs("Végcella"), "")
+                If xlVégcella = "" Then
+                    xlHosszmérõ = rs("HosszmérõCella")
+                    xlUtolsóOszlop = rs("UtolsóOszlop")
+                    intVégcella = objSheet.Range(xlHosszmérõ & 1).Column
+                    xlVégcella = objSheet.Cells(objSheet.Cells.Rows.count, intVégcella).End(xlUp).row
+                    xlVégcella = xlUtolsóOszlop & xlVégcella
+                    logba , "hosszcella: " & xlHosszmérõ & ", utolsó oszl.: " & xlUtolsóOszlop & ", Végcella: " & xlVégcella, 3
+                End If
+                
+                    If DCount("[Name]", "MSysObjects", "[Name] = '" & accTábla & "'") = 1 Then
+                            CurrentDb.Execute "DELETE FROM [" & accTábla & "]", dbFailOnError
+
+                        Else
+                            CurrentDb.Execute "DELETE FROM [" & accTábla & "_tart]", dbFailOnError
+                            DoCmd.CopyObject strHáttérDb, accTábla, acTable, accTábla & "_tart"
+                        End If
+                    If CsakSzám(rs("KezdõCella")) < CsakSzám(xlVégcella) Then
+                        With objSheet
+                            .Range(.Range(rs("KezdõCella")), .Range(xlVégcella)).Name = accTábla 'Elnevezzük a területet
+                            sFoly ûrlap, accTábla & ":;" & .Range(accTábla).Rows.count
+                            logba , .Range(accTábla).Rows.count, 3
+                        End With
+                        
+                
+                        'Elkezdjük az adatok betöltését
+                        Set rsCél = db.OpenRecordset(accTábla)
+                
+                        Értékek = objSheet.Range(accTábla).Value
+                        logba , "Az " & accTábla & " területrõl az adatokat beolvastuk."
+                        logba , "A céltábla:" & rsCél.Name
+                
+                        For sor = LBound(Értékek, 1) To UBound(Értékek, 1)
+                            intMezõ = 0
+                            'új rekord hozzáadása kezdõdik...
+                            rsCél.AddNew
+                            For oszlop = LBound(Értékek, 2) To UBound(Értékek, 2)
+                                If rsCél.Fields.count < oszlop Then
+                                    Exit For
+                                End If
+                                intMezõ = oszlop - 1
+                
+                                rsCél.Fields(intMezõ) = konverter(rsCél.Fields(intMezõ), Értékek(sor, oszlop))
+                                
+                            Next oszlop
+                            rsCél.Fields(oszlop - 1) = hatályID
+                            rsCél.Update
+                            'új rekord hozzáadása véget ért
+                        Next sor
+                        logba , "Az " & accTábla & " nevû táblába az adatokat beírtuk:" & sor & " sor."
+                        logba , "Az " & accTábla & " beolvasása megtörtént."
+                    Else
+                        logba , "Az " & accTábla & " nevû táblába nem írtunk adatokat, mert üres volt."
+                        logba , "Az " & accTábla & " beolvasása megtörtént."
+                    End If
+
+            End If
+            rs.MoveNext
+            intVégcella = 0
+        Loop
+        logba , objBook.Name & " bezárása mentés nélkül...", 3
+        fvHaviTáblaImport = True
+        GoTo Tisztítás
+    fvki
 Exit Function
 
 Tisztítás:
