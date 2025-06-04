@@ -32,7 +32,7 @@ Private Sub OszlopokÁtnevezése(rng As Object)
         End If
     Next cell
 End Sub
-Sub UresOszlopokTorlese(ByVal strFájlnévÚtvonallal As String, Optional ByVal strTáblaNév As String = "tSzemélyek", Optional ByVal bAdójelKellE As Boolean = True, Optional ByVal bTörölniKellE As Boolean = True, Optional ByVal kezdõcella As String = vbNullString)
+Sub UresOszlopokTorlese(ByVal strFájlnévÚtvonallal As String, Optional ByVal strTáblaNév As String = "tSzemélyek", Optional ByVal bAdójelKellE As Boolean = True, Optional ByVal bTörölniKellE As Boolean = True, Optional ByVal kezdõcella As String = vbNullString, Optional ByVal xclLapSzáma As Integer = 1)
 '#####################################################################################################
 '#
 '#  A személytörzs táblában kitörli az üres (adatot nem tartalmazó) oszlopokat,
@@ -56,7 +56,7 @@ Sub UresOszlopokTorlese(ByVal strFájlnévÚtvonallal As String, Optional ByVal str
     Set xlApp = New Excel.Application
     xlApp.DisplayAlerts = False
     Set xlWB = xlApp.Workbooks.Open(strFájlnévÚtvonallal)
-    Set lap = xlWB.Sheets(1)
+    Set lap = xlWB.Sheets(xclLapSzáma)
     Debug.Print lap.Name
 
     If bTörölniKellE Then
