@@ -15,21 +15,25 @@ var chartArray = [];
  *   akkor az összes tblzat grafikonjt frissítjük.
  *********************************************************************************************************/
 function ShowSearchedRows(filterText, rows, tableId) {
-    filterText = filterText.toLowerCase();
+    // Több keresési kifejezés támogatása pontosvesszővel elválasztva
+    let filterTerms = filterText
+        .toLowerCase()
+        .split(';')
+        .map(term => term.trim())
+        .filter(term => term.length > 0);
+
     const unhiddenRows = [];
     rows.forEach(row => {
         const rowText = row.innerText.toLowerCase();
-        if (rowText.includes(filterText)) {
+        // Ha nincs keresési kifejezés, minden sor látszik
+        if (filterTerms.length === 0 || filterTerms.some(term => rowText.includes(term))) {
             row.style.display = "";
-            // Show the row
             unhiddenRows.push(row);
-            //Az el nem rejtett sorokat tömbhöz adjuk
         } else {
             row.style.display = "none";
-            // Hide the row
         }
-    }
-    );
+    });
+
     if (tableId) {
         generateChart(tableId, unhiddenRows);
     } else {
@@ -37,7 +41,6 @@ function ShowSearchedRows(filterText, rows, tableId) {
         for (let n = 1; n <= tablakszama; n++) {
             generateChart(`table${n}`, unhiddenRows);
         }
-        ;
     }
     ;/*return unhiddenRows.length;*/
 }
