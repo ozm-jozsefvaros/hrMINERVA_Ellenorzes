@@ -446,9 +446,18 @@ Public Function dtÁtal(strDátum As Variant, Optional Sorrend As String = "éhn", 
 ' Ha a strDátum értéke Null vagy semmi, továbbá, ha a sorrend elsõ három karaktere az é, h és n betûkbõl nem pontosan egyet-egyet tartalmaz,
 ' akkor 1-et ad vissza.
 ' Kell hozzá az ffsplit() fv., ahhoz meg a StrCount() függvény.
-    Dim dtVál, dtVálasztók, strDate As String
-    Dim év, hó, nap As String
-    Dim i, j, darab, ihó, inap, iév As Integer
+    Dim dtVál as string,
+        dtVálasztók as string,
+        strDate As String
+    Dim év as string, _
+        hó as string, _
+        nap As String
+    Dim i as integer, _
+        j as integer, _
+        darab as integer, _
+        ihó as integer, _
+        inap as integer,
+        iév As Integer
     Dim Kimenet As Date
 On Error GoTo Hiba
     If IsNumeric(strDátum) Then

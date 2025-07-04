@@ -103,12 +103,12 @@ If colFvNév.count < 1 Then Exit Sub
     End If
 End Sub
 
-Sub sFoly(ûrlap As Form, Üzenet As String, Optional idõtis As Boolean = True, Optional loglevel As Integer = 1)
+Sub sFoly(ûrlap As Form, üzenet As String, Optional idõtis As Boolean = True, Optional loglevel As Integer = 1)
 '#MIT Oláh Zoltán (2023)
     Dim a As Boolean
-    a = Foly(ûrlap, Üzenet, idõtis)
+    a = Foly(ûrlap, üzenet, idõtis)
 End Sub
-Function Foly(ûrlap As Form, Üzenet As String, Optional idõtis As Boolean = True, Optional loglevel As Integer = 1) As Boolean
+Function Foly(ûrlap As Form, üzenet As String, Optional idõtis As Boolean = True, Optional loglevel As Integer = 1) As Boolean
 '#MIT Oláh Zoltán (2023)
 Dim x
 Dim i As Integer
@@ -117,8 +117,8 @@ Dim oszlopszélesség As Integer
 Dim esemény As String
 Dim üzenetTárgya As String
 oszlopszélesség = OszlopSzélességKarakter("folyamat", 2, ûrlap)
-esemény = ffsplit(Üzenet, ";", 2)
-üzenetTárgya = ffsplit(Üzenet, ";", 1)
+esemény = ffsplit(üzenet, ";", 2)
+üzenetTárgya = ffsplit(üzenet, ";", 1)
 most = Now()
 
 'Elõször a logtáblába írjuk ki
@@ -127,11 +127,11 @@ If loglevel <= 1 Then DoEvents
 If loglevel = 1 Then
 'Azután a log listába
     If idõtis Then
-        If StrCount(Üzenet, ";") = 1 And ûrlap.Folyamat.ListCount = 0 Then
-            Üzenet = Üzenet & "; Idõpont"
+        If StrCount(üzenet, ";") = 1 And ûrlap.Folyamat.ListCount = 0 Then
+            üzenet = üzenet & "; Idõpont"
         Else
-            If StrCount(Üzenet, ";") = 1 Then
-                Üzenet = Üzenet & "; " & most
+            If StrCount(üzenet, ";") = 1 Then
+                üzenet = üzenet & "; " & most
             End If
         End If
     End If
@@ -147,7 +147,7 @@ If loglevel = 1 Then
             End If
         Next i
     Else
-        ûrlap.Folyamat.AddItem item:=Üzenet
+        ûrlap.Folyamat.AddItem item:=üzenet
     End If
     ûrlap.Repaint
     ûrlap.Folyamat.Selected(ûrlap.Folyamat.ListCount - 1) = True
